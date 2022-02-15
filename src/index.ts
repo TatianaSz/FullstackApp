@@ -1,9 +1,25 @@
-import { MikroORM } from "@mikro-orm/core";
-import { Post } from "./entieties/Post";
-import ormConfig from "./mikro-orm.config"
+import "reflect-metadata";
+import { createConnection } from "typeorm";
+import { Post } from "./entity/Post";
 
-const main = async() =>{
-    const orm =  await MikroORM.init(ormConfig);
-
-}
-main()
+createConnection({
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    username: "tatiana",
+    password: "lireddit",
+    database: "lireddit",
+    entities: [
+        Post
+    ],
+    synchronize: true,
+    logging: false
+}).then( async connection => {
+    let post = new Post();
+    post.name = "switched to typeorm";
+    await connection.manager
+            .save(post)
+            .then(post => {
+                console.log("Photo has been saved. Photo id is", post.id);
+            });
+}).catch(error => console.log(error));
