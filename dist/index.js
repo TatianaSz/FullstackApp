@@ -16,7 +16,8 @@ require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const Post_1 = require("./entity/Post");
 const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
+const apollo_server_express_1 = require("apollo-server-express");
+const main_1 = require("./resolvers/main");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         (0, typeorm_1.createConnection)({
@@ -32,13 +33,15 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             synchronize: true,
             logging: false
         });
-        console.log("connected to database");
-        app.use(express_1.default.json());
-        app.get("/", (req, res) => {
-            res.send("port 8080 working fine");
-        });
+        const server = new apollo_server_express_1.ApolloServer({ typeDefs: main_1.typeDefs, resolvers: main_1.resolvers });
+        const app = (0, express_1.default)();
+        yield server.start();
+        server.applyMiddleware({ app });
         app.listen(8080, () => {
             console.log("app");
+        });
+        app.get("/", (req, res) => {
+            res.send("port 8080 working fine");
         });
     }
     catch (error) {

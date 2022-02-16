@@ -2,8 +2,8 @@ import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { Post } from "./entity/Post";
 import express from 'express';
-
-const app = express();
+import { ApolloServer } from "apollo-server-express";
+import { typeDefs, resolvers } from "./resolvers/main";
 
 const main =async () => {
     try {
@@ -20,13 +20,16 @@ const main =async () => {
             synchronize: true,
             logging: false
         })
-        console.log("connected to database")
-        app.use(express.json())
-        app.get("/", (req,res)=>{
-            res.send("port 8080 working fine")
-        })
+        const server = new ApolloServer({ typeDefs, resolvers });
+        const app = express();
+        await server.start()
+        
+        server.applyMiddleware({app})
         app.listen(8080, ()=>{
             console.log("app")
+        })
+        app.get("/", (req,res)=>{
+            res.send("port 8080 working fine")
         })
     }
     catch(error) { console.log(error)};
