@@ -3,7 +3,9 @@ import { createConnection } from "typeorm";
 import { Post } from "./entity/Post";
 import express from 'express';
 import { ApolloServer } from "apollo-server-express";
-import { typeDefs, resolvers } from "./resolvers/main";
+import { PostResolver } from "./resolvers/main";
+import { buildSchema } from "type-graphql";
+import { GraphQLSchema } from "graphql";
 
 const main =async () => {
     try {
@@ -20,7 +22,10 @@ const main =async () => {
             synchronize: true,
             logging: false
         })
-        const server = new ApolloServer({ typeDefs, resolvers });
+        const schema: GraphQLSchema = await buildSchema({
+            resolvers: [PostResolver] 
+          })
+        const server = new ApolloServer({schema});
         const app = express();
         await server.start()
         

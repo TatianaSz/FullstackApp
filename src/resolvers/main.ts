@@ -1,31 +1,11 @@
-import { gql } from "apollo-server-express";
 
-export const typeDefs = gql`
+import { Post } from "src/entity/Post";
+import { Resolver, Query } from "type-graphql";
 
-  type Book {
-    title: String
-    author: String
+@Resolver()
+export class PostResolver {
+  @Query(() => [Post])
+  posts() {
+    return "posts";
   }
-
-
-  type Query {
-    books: [Book]
-  }
-`;
-
-const books = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
-
-export const resolvers = {
-  Query: {
-    books: () => books,
-  },
-};
+}
