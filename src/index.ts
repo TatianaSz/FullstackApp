@@ -1,15 +1,15 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
-import { Post } from "./entity/Post";
 import express from 'express';
 import { ApolloServer } from "apollo-server-express";
 import { PostResolver } from "./resolvers/main";
 import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
+import { Post } from "./entity/Post";
+import { createConnection } from "typeorm";
 
 const main =async () => {
-    try {
-        createConnection({
+    try{
+      await createConnection({
             type: "postgres",
             host: "localhost",
             port: 5432,
@@ -25,7 +25,7 @@ const main =async () => {
         const schema: GraphQLSchema = await buildSchema({
             resolvers: [PostResolver] 
           })
-        const server = new ApolloServer({schema});
+        const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res })});
         const app = express();
         await server.start()
         
@@ -33,11 +33,14 @@ const main =async () => {
         app.listen(8080, ()=>{
             console.log("app")
         })
-        app.get("/", (req,res)=>{
+        app.get("/", (_req,res)=>{
             res.send("port 8080 working fine")
         })
     }
-    catch(error) { console.log(error)};
+    catch (error) {
+        console.error(error);
+      }
+   
 }
 // .then( async connection => {
 //     let post = new Post();
@@ -48,4 +51,5 @@ const main =async () => {
 //                 console.log("succes", post.id);
 //             });
 // })
+
 main();

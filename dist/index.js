@@ -13,14 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-const typeorm_1 = require("typeorm");
-const Post_1 = require("./entity/Post");
 const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
 const main_1 = require("./resolvers/main");
+const type_graphql_1 = require("type-graphql");
+const Post_1 = require("./entity/Post");
+const typeorm_1 = require("typeorm");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        (0, typeorm_1.createConnection)({
+        yield (0, typeorm_1.createConnection)({
             type: "postgres",
             host: "localhost",
             port: 5432,
@@ -33,21 +34,23 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             synchronize: true,
             logging: false
         });
-        const server = new apollo_server_express_1.ApolloServer({ typeDefs: main_1.typeDefs, resolvers: main_1.resolvers });
+        const schema = yield (0, type_graphql_1.buildSchema)({
+            resolvers: [main_1.PostResolver]
+        });
+        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }) });
         const app = (0, express_1.default)();
         yield server.start();
         server.applyMiddleware({ app });
         app.listen(8080, () => {
             console.log("app");
         });
-        app.get("/", (req, res) => {
+        app.get("/", (_req, res) => {
             res.send("port 8080 working fine");
         });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
-    ;
 });
 main();
 //# sourceMappingURL=index.js.map
