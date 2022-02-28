@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Post.prototype, "updatedAt", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)(() => String),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Post.prototype, "name", void 0);

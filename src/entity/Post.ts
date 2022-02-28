@@ -16,7 +16,7 @@ export class Post extends BaseEntity{
   @Column()
   updatedAt: Date = new Date();
 
-  @Field()
+  @Field(() => String)
   @Column()
   name!: string;
 }
