@@ -6,6 +6,7 @@ import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
+import { User } from "./entity/User";
 
 const main =async () => {
     try{
@@ -17,7 +18,7 @@ const main =async () => {
             password: "lireddit",
             database: "lireddit",
             entities: [
-                Post
+                Post, User
             ],
             synchronize: true,
             logging: false

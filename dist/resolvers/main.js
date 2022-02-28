@@ -47,6 +47,15 @@ let PostResolver = class PostResolver {
             return post;
         });
     }
+    deletePost(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const post = yield Post_1.Post.findOne({ where: { id } });
+            if (!post)
+                throw new crud_1.CRUDError("Post not found!");
+            yield post.remove();
+            return true;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Post_1.Post]),
@@ -76,6 +85,13 @@ __decorate([
     __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "updatePost", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], PostResolver.prototype, "deletePost", null);
 PostResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], PostResolver);

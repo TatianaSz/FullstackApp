@@ -30,7 +30,7 @@ export class PostResolver {
   async updatePost(
     @Arg("id") id: number,
     @Arg("name", {nullable: true}) name: string)
-    
+    : Promise<Post>
   {
     const post = await Post.findOne({ where: { id } });
     if (!post) throw new CRUDError("Post not found!");
@@ -39,5 +39,16 @@ export class PostResolver {
     await post.save();
     return post;
   }
+
   
+  @Mutation(()=>Boolean)
+  async deletePost(
+    @Arg("id") id: number)
+    : Promise<boolean>
+  {
+    const post = await Post.findOne({ where: { id } });
+    if (!post) throw new CRUDError("Post not found!");
+    await post.remove();
+    return true;
+  }
 }

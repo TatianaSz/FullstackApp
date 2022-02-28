@@ -19,6 +19,7 @@ const main_1 = require("./resolvers/main");
 const type_graphql_1 = require("type-graphql");
 const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
+const User_1 = require("./entity/User");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
@@ -29,7 +30,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             password: "lireddit",
             database: "lireddit",
             entities: [
-                Post_1.Post
+                Post_1.Post, User_1.User
             ],
             synchronize: true,
             logging: false
