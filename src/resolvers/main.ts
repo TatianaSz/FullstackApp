@@ -1,6 +1,7 @@
 
 import { Post } from "../entity/Post";
 import { Resolver, Query, Arg, Mutation} from "type-graphql";
+import { CRUDError } from "../errors/crud";
 
 @Resolver()
 export class PostResolver {
@@ -20,7 +21,23 @@ export class PostResolver {
   @Mutation(()=>Post)
   createPost(
     @Arg("name") name: string)
+    : Promise<Post>
   {
     return Post.create({name}).save()
   }
+
+  @Mutation(()=>Post)
+  async updatePost(
+    @Arg("id") id: number,
+    @Arg("name", {nullable: true}) name: string)
+    
+  {
+    const post = await Post.findOne({ where: { id } });
+    if (!post) throw new CRUDError("Post not found!");
+    if (!name) throw new CRUDError("Title is empty!");
+    post.name = name;
+    await post.save();
+    return post;
+  }
+  
 }
