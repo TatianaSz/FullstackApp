@@ -20,6 +20,7 @@ const type_graphql_1 = require("type-graphql");
 const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./entity/User");
+const register_1 = require("./resolvers/register");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
@@ -33,10 +34,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 Post_1.Post, User_1.User
             ],
             synchronize: true,
-            logging: false
+            logging: true
         });
         const schema = yield (0, type_graphql_1.buildSchema)({
-            resolvers: [main_1.PostResolver]
+            resolvers: [main_1.PostResolver, register_1.RegisterResolver]
         });
         const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }) });
         const app = (0, express_1.default)();

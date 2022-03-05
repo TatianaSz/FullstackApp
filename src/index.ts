@@ -7,6 +7,7 @@ import { GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
+import { RegisterResolver } from "./resolvers/register";
 
 const main =async () => {
     try{
@@ -21,10 +22,10 @@ const main =async () => {
                 Post, User
             ],
             synchronize: true,
-            logging: false
+            logging: true
         })
         const schema: GraphQLSchema = await buildSchema({
-            resolvers: [PostResolver] 
+            resolvers: [PostResolver, RegisterResolver] 
           })
         const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res })});
         const app = express();
