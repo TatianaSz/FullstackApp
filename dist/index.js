@@ -20,7 +20,7 @@ const type_graphql_1 = require("type-graphql");
 const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./entity/User");
-const register_1 = require("./resolvers/register");
+const register_1 = require("./resolvers/register/register");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({

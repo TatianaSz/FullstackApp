@@ -7,7 +7,7 @@ import { GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
-import { RegisterResolver } from "./resolvers/register";
+import { RegisterResolver } from "./resolvers/register/register";
 
 const main =async () => {
     try{
