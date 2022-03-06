@@ -44,14 +44,6 @@ const main =async () => {
       }
    
 }
-// .then( async connection => {
-//     let post = new Post();
-//     post.name = "switched to typeorm";
-//     await connection.manager
-//             .save(post)
-//             .then(post => {
-//                 console.log("succes", post.id);
-//             });
-// })
+
 
 main();

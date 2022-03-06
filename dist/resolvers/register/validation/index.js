@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterInput = void 0;
 const class_validator_1 = require("class-validator");
+const isEmailUsed_1 = require("../../validators/isEmailUsed");
 const type_graphql_1 = require("type-graphql");
 let RegisterInput = class RegisterInput {
 };
@@ -22,6 +23,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, class_validator_1.IsEmail)(),
+    (0, isEmailUsed_1.isEmailUsed)({
+        message: 'Email is already in use',
+    }),
     __metadata("design:type", String)
 ], RegisterInput.prototype, "email", void 0);
 __decorate([
