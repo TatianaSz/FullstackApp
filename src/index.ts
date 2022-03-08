@@ -8,6 +8,10 @@ import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
 import { RegisterResolver } from "./resolvers/register/register";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
+import cors from "cors";
 
 const main =async () => {
     try{
@@ -29,7 +33,22 @@ const main =async () => {
           })
         const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res })});
         const app = express();
-        await server.start()
+        await server.start();
+
+        const RedisStore = connectRedis(session)
+        app.use(cors({
+          credentials: true,
+          origin: "http://localhost:8080"
+        }))
+          const redisClient = new Redis()
+        app.use(
+            session({
+              store: new RedisStore({ client: redisClient }),
+              saveUninitialized: false,
+              secret: "keyboard cat",
+              resave: false,
+            })
+          )
         
         server.applyMiddleware({app})
         app.listen(8080, ()=>{
