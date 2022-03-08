@@ -69,14 +69,14 @@ let RegisterResolver = class RegisterResolver {
             }).save();
         });
     }
-    login({ username, password }) {
+    login({ loginType, password }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User_1.User.findOne({ where: { username } });
+            const user = yield User_1.User.findOne({ where: [{ username: loginType }, { email: loginType }] });
             if (!user) {
                 return {
                     errors: [{
                             field: "username",
-                            message: "User with this username does not exist"
+                            message: "User not found"
                         }]
                 };
             }
@@ -110,7 +110,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("input")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [validation_1.RegisterInput]),
+    __metadata("design:paramtypes", [validation_1.LoginInput]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "login", null);
 RegisterResolver = __decorate([

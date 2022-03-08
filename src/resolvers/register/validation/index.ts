@@ -18,3 +18,12 @@ export class RegisterInput {
     @Field()
     password: string;
 }
+
+@InputType()
+export class LoginInput {
+    @Field()
+    loginType: string
+    
+    @Field()
+    password: string;
+}

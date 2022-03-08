@@ -21,10 +21,6 @@ const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./entity/User");
 const register_1 = require("./resolvers/register/register");
-const express_session_1 = __importDefault(require("express-session"));
-const connect_redis_1 = __importDefault(require("connect-redis"));
-const ioredis_1 = __importDefault(require("ioredis"));
-const cors_1 = __importDefault(require("cors"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
@@ -46,18 +42,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }) });
         const app = (0, express_1.default)();
         yield server.start();
-        const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
-        app.use((0, cors_1.default)({
-            credentials: true,
-            origin: "http://localhost:8080"
-        }));
-        const redisClient = new ioredis_1.default();
-        app.use((0, express_session_1.default)({
-            store: new RedisStore({ client: redisClient }),
-            saveUninitialized: false,
-            secret: "keyboard cat",
-            resave: false,
-        }));
         server.applyMiddleware({ app });
         app.listen(8080, () => {
             console.log("app");

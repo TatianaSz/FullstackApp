@@ -2,7 +2,7 @@
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs"
 import { Resolver, Query, Arg, Mutation, ObjectType, Field} from "type-graphql";
-import { RegisterInput } from "./validation";
+import { LoginInput, RegisterInput } from "./validation";
 
 @ObjectType()
 class FieldError{
@@ -43,15 +43,15 @@ const hashed = await bcrypt.hash(password, 14)
 
 @Mutation(() => UserResponse)
 async login(
-  @Arg("input") {username, password}: RegisterInput)
+  @Arg("input") {loginType, password}: LoginInput)
   : Promise<UserResponse>
 {
-  const user = await User.findOne({ where: { username } })
+  const user = await User.findOne({ where: [{ username:loginType }, {email:loginType}] })
   if(!user){
     return{
       errors:[{
         field: "username",
-        message:"User with this username does not exist"
+        message:"User not found"
       }]
     }
   }

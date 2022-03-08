@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterInput = void 0;
+exports.LoginInput = exports.RegisterInput = void 0;
 const class_validator_1 = require("class-validator");
 const isEmailUsed_1 = require("../../validators/isEmailUsed");
 const type_graphql_1 = require("type-graphql");
@@ -36,4 +36,18 @@ RegisterInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], RegisterInput);
 exports.RegisterInput = RegisterInput;
+let LoginInput = class LoginInput {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], LoginInput.prototype, "loginType", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], LoginInput.prototype, "password", void 0);
+LoginInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], LoginInput);
+exports.LoginInput = LoginInput;
 //# sourceMappingURL=index.js.map
