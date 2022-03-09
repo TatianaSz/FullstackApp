@@ -29,6 +29,7 @@ const User_1 = require("../../entity/User");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const type_graphql_1 = require("type-graphql");
 const validation_1 = require("./validation");
+const errors_1 = require("../../errors");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -62,23 +63,19 @@ let RegisterResolver = class RegisterResolver {
     createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashed = yield bcryptjs_1.default.hash(password, 14);
-            return yield User_1.User.create({
+            const user = yield User_1.User.create({
                 username,
                 email,
                 password: hashed
             }).save();
+            return user;
         });
     }
     login({ loginType, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.User.findOne({ where: [{ username: loginType }, { email: loginType }] });
             if (!user) {
-                return {
-                    errors: [{
-                            field: "username",
-                            message: "User not found"
-                        }]
-                };
+                throw new errors_1.OwnValidationError("LOGIN_FAILED", "username", "doesUserExist", "User not found");
             }
             const checkPassword = yield bcryptjs_1.default.compare(password, user.password);
             if (!checkPassword) {

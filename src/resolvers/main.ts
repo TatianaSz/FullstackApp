@@ -1,7 +1,8 @@
 
 import { Post } from "../entity/Post";
 import { Resolver, Query, Arg, Mutation} from "type-graphql";
-import { CRUDError } from "../errors/crud";
+import { OwnValidationError } from "../errors";
+
 
 @Resolver()
 export class PostResolver {
@@ -33,8 +34,8 @@ export class PostResolver {
     : Promise<Post>
   {
     const post = await Post.findOne({ where: { id } });
-    if (!post) throw new CRUDError("Post not found!");
-    if (!name) throw new CRUDError("Title is empty!");
+    if (!post) throw new OwnValidationError("POST_NOT_FOUND", "post", "doesPostExist", "Post not found");
+    if (!name) throw new OwnValidationError("EMPTY_TITLE", "title", "isTitle", "Provide a new title");
     post.name = name;
     await post.save();
     return post;
@@ -47,7 +48,7 @@ export class PostResolver {
     : Promise<boolean>
   {
     const post = await Post.findOne({ where: { id } });
-    if (!post) throw new CRUDError("Post not found!");
+    if (!post) throw new OwnValidationError("POST_NOT_FOUND", "post", "doesPostExist", "Post not found");
     await post.remove();
     return true;
   }

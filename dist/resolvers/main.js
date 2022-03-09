@@ -24,7 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostResolver = void 0;
 const Post_1 = require("../entity/Post");
 const type_graphql_1 = require("type-graphql");
-const crud_1 = require("../errors/crud");
+const errors_1 = require("../errors");
 let PostResolver = class PostResolver {
     posts() {
         return Post_1.Post.find();
@@ -39,9 +39,9 @@ let PostResolver = class PostResolver {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield Post_1.Post.findOne({ where: { id } });
             if (!post)
-                throw new crud_1.CRUDError("Post not found!");
+                throw new errors_1.OwnValidationError("POST_NOT_FOUND", "post", "doesPostExist", "Post not found");
             if (!name)
-                throw new crud_1.CRUDError("Title is empty!");
+                throw new errors_1.OwnValidationError("EMPTY_TITLE", "title", "isTitle", "Provide a new title");
             post.name = name;
             yield post.save();
             return post;
@@ -51,7 +51,7 @@ let PostResolver = class PostResolver {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield Post_1.Post.findOne({ where: { id } });
             if (!post)
-                throw new crud_1.CRUDError("Post not found!");
+                throw new errors_1.OwnValidationError("POST_NOT_FOUND", "post", "doesPostExist", "Post not found");
             yield post.remove();
             return true;
         });

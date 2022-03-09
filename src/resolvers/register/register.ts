@@ -3,6 +3,14 @@ import { User } from "../../entity/User";
 import bcrypt from "bcryptjs"
 import { Resolver, Query, Arg, Mutation, ObjectType, Field} from "type-graphql";
 import { LoginInput, RegisterInput } from "./validation";
+import { OwnValidationError } from "../../errors"
+
+
+
+
+
+
+
 
 @ObjectType()
 class FieldError{
@@ -20,6 +28,10 @@ class UserResponse{
   user?: User
 }
 
+
+
+
+
 @Resolver()
 export class RegisterResolver {
 
@@ -34,11 +46,12 @@ async createUser(
   : Promise<User>
 {
 const hashed = await bcrypt.hash(password, 14)
-  return await User.create({
+  const user =  await User.create({
       username,
       email,
       password: hashed
     }).save()
+   return user
 }
 
 @Mutation(() => UserResponse)
@@ -46,14 +59,11 @@ async login(
   @Arg("input") {loginType, password}: LoginInput)
   : Promise<UserResponse>
 {
+  
   const user = await User.findOne({ where: [{ username:loginType }, {email:loginType}] })
+ 
   if(!user){
-    return{
-      errors:[{
-        field: "username",
-        message:"User not found"
-      }]
-    }
+    throw new OwnValidationError("LOGIN_FAILED", "username", "doesUserExist", "User not found")
   }
 const checkPassword = await bcrypt.compare(password, user.password)
 if(!checkPassword){
