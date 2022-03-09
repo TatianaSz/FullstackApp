@@ -30,32 +30,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const type_graphql_1 = require("type-graphql");
 const validation_1 = require("./validation");
 const errors_1 = require("../../errors");
-let FieldError = class FieldError {
-};
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], FieldError.prototype, "field", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], FieldError.prototype, "message", void 0);
-FieldError = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], FieldError);
-let UserResponse = class UserResponse {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => [FieldError], { nullable: true }),
-    __metadata("design:type", Array)
-], UserResponse.prototype, "errors", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => User_1.User, { nullable: true }),
-    __metadata("design:type", User_1.User)
-], UserResponse.prototype, "user", void 0);
-UserResponse = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], UserResponse);
 let RegisterResolver = class RegisterResolver {
     users() {
         return User_1.User.find();
@@ -79,14 +53,9 @@ let RegisterResolver = class RegisterResolver {
             }
             const checkPassword = yield bcryptjs_1.default.compare(password, user.password);
             if (!checkPassword) {
-                return {
-                    errors: [{
-                            field: "password",
-                            message: "Invalid password"
-                        }]
-                };
+                throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");
             }
-            return { user };
+            return user;
         });
     }
 };
@@ -104,7 +73,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "createUser", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => UserResponse),
+    (0, type_graphql_1.Mutation)(() => User_1.User),
     __param(0, (0, type_graphql_1.Arg)("input")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [validation_1.LoginInput]),

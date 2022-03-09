@@ -1,36 +1,9 @@
 
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs"
-import { Resolver, Query, Arg, Mutation, ObjectType, Field} from "type-graphql";
+import { Resolver, Query, Arg, Mutation} from "type-graphql";
 import { LoginInput, RegisterInput } from "./validation";
 import { OwnValidationError } from "../../errors"
-
-
-
-
-
-
-
-
-@ObjectType()
-class FieldError{
-  @Field()
-  field: string;
-  @Field()
-  message: string
-}
-
-@ObjectType()
-class UserResponse{
-  @Field(()=>[FieldError], {nullable:true})
-  errors?: FieldError[];
-  @Field(()=>User, {nullable:true})
-  user?: User
-}
-
-
-
-
 
 @Resolver()
 export class RegisterResolver {
@@ -54,12 +27,11 @@ const hashed = await bcrypt.hash(password, 14)
    return user
 }
 
-@Mutation(() => UserResponse)
+@Mutation(() => User)
 async login(
   @Arg("input") {loginType, password}: LoginInput)
-  : Promise<UserResponse>
+  : Promise<User>
 {
-  
   const user = await User.findOne({ where: [{ username:loginType }, {email:loginType}] })
  
   if(!user){
@@ -67,13 +39,8 @@ async login(
   }
 const checkPassword = await bcrypt.compare(password, user.password)
 if(!checkPassword){
-  return{
-    errors:[{
-      field: "password",
-      message:"Invalid password"
-    }]
-  }
+  throw new OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password")
 }
-  return {user}
+  return user
 }
 }

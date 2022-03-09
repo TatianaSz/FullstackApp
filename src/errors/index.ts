@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-errors';
-import { isPropertyAccessChain } from 'typescript';
+
 
 class ErrorStructure {
   property: string;
