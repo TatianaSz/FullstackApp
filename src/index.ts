@@ -9,10 +9,17 @@ import { createConnection } from "typeorm";
 import { User } from "./entity/User";
 import { RegisterResolver } from "./resolvers/register/register";
 
-// import session from "express-session";
-// import connectRedis from "connect-redis";
-// import Redis from "ioredis";
-// import cors from "cors";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import Redis from "ioredis";
+
+
+declare module 'express-session' {
+  export interface SessionData {
+    user: { [key: string]: any };
+    userId: number;
+  }
+}
 
 const main =async () => {
     try{
@@ -34,32 +41,36 @@ const main =async () => {
           })
         const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res }), formatError: (error:GraphQLError)=>{
           const {extensions, message} = error
-          if(extensions !=undefined){
-            const code = extensions["code"]
-            const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el:any)=>{
-              return el["constraints"]
-            }))
-            return { code, response, message};
-        }
-          return { message};
+          if(extensions != undefined && extensions["exception"]["validationErrors"] !=undefined ){
+           const response =  Object.assign({}, ...extensions["exception"]["validationErrors"].map((el:any)=>{
+             return el["constraints"]
+           }))
+           return {response, message}
+          }
+         return {extensions, message}
         }});
         const app = express();
         await server.start();
 
-        // const RedisStore = connectRedis(session)
-        // app.use(cors({
-        //   credentials: true,
-        //   origin: "http://localhost:8080"
-        // }))
-        //   const redisClient = new Redis()
-        // app.use(
-        //     session({
-        //       store: new RedisStore({ client: redisClient }),
-        //       saveUninitialized: false,
-        //       secret: "keyboard cat",
-        //       resave: false,
-        //     })
-        //   )
+         const RedisStore = connectRedis(session)
+         let redisClient = new Redis()
+
+
+        app.use(
+            session({
+              name: "ciq",
+              store: new RedisStore({ client: redisClient}),
+              secret: "keyboard cat",
+              saveUninitialized: false,
+              cookie:{
+                maxAge: 1000 * 3600 * 24 * 365 * 5,
+                httpOnly: true,
+                sameSite: "none",
+                secure: true,
+              },
+              resave: false,
+            })
+          )
         
         server.applyMiddleware({app})
         app.listen(8080, ()=>{
@@ -75,5 +86,6 @@ const main =async () => {
    
 }
 
-
 main();
+
+

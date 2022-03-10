@@ -30,6 +30,7 @@ __decorate([
 ], RegisterInput.prototype, "email", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
+    (0, class_validator_1.MinLength)(5),
     __metadata("design:type", String)
 ], RegisterInput.prototype, "password", void 0);
 RegisterInput = __decorate([
@@ -40,10 +41,12 @@ let LoginInput = class LoginInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
+    (0, class_validator_1.MinLength)(1),
     __metadata("design:type", String)
 ], LoginInput.prototype, "loginType", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
+    (0, class_validator_1.MinLength)(5),
     __metadata("design:type", String)
 ], LoginInput.prototype, "password", void 0);
 LoginInput = __decorate([

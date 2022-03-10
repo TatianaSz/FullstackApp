@@ -1,9 +1,10 @@
 
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs"
-import { Resolver, Query, Arg, Mutation} from "type-graphql";
+import { Resolver, Query, Arg, Mutation, Ctx} from "type-graphql";
 import { LoginInput, RegisterInput } from "./validation";
 import { OwnValidationError } from "../../errors"
+import {TContext} from "../../types/Context"
 
 @Resolver()
 export class RegisterResolver {
@@ -29,7 +30,9 @@ const hashed = await bcrypt.hash(password, 14)
 
 @Mutation(() => User)
 async login(
-  @Arg("input") {loginType, password}: LoginInput)
+  @Arg("input") {loginType, password}: LoginInput,
+  @Ctx() ctx: TContext
+  )
   : Promise<User>
 {
   const user = await User.findOne({ where: [{ username:loginType }, {email:loginType}] })
@@ -41,6 +44,8 @@ const checkPassword = await bcrypt.compare(password, user.password)
 if(!checkPassword){
   throw new OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password")
 }
+
+ctx.req.session!.userId = user.id
   return user
 }
 }

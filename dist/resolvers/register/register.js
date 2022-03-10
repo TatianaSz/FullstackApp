@@ -45,7 +45,7 @@ let RegisterResolver = class RegisterResolver {
             return user;
         });
     }
-    login({ loginType, password }) {
+    login({ loginType, password }, ctx) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield User_1.User.findOne({ where: [{ username: loginType }, { email: loginType }] });
             if (!user) {
@@ -55,6 +55,7 @@ let RegisterResolver = class RegisterResolver {
             if (!checkPassword) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");
             }
+            ctx.req.session.userId = user.id;
             return user;
         });
     }
@@ -75,8 +76,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)(() => User_1.User),
     __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [validation_1.LoginInput]),
+    __metadata("design:paramtypes", [validation_1.LoginInput, Object]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "login", null);
 RegisterResolver = __decorate([
