@@ -39,7 +39,17 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const schema = yield (0, type_graphql_1.buildSchema)({
             resolvers: [main_1.PostResolver, register_1.RegisterResolver]
         });
-        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }) });
+        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }), formatError: (error) => {
+                const { extensions, message } = error;
+                if (extensions != undefined) {
+                    const code = extensions["code"];
+                    const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el) => {
+                        return el["constraints"];
+                    }));
+                    return { code, response, message };
+                }
+                return { message };
+            } });
         const app = (0, express_1.default)();
         yield server.start();
         server.applyMiddleware({ app });

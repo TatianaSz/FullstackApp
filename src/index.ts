@@ -3,11 +3,12 @@ import express from 'express';
 import { ApolloServer } from "apollo-server-express";
 import { PostResolver } from "./resolvers/main";
 import { buildSchema } from "type-graphql";
-import { GraphQLSchema } from "graphql";
+import {  GraphQLError, GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
 import { RegisterResolver } from "./resolvers/register/register";
+
 // import session from "express-session";
 // import connectRedis from "connect-redis";
 // import Redis from "ioredis";
@@ -31,7 +32,17 @@ const main =async () => {
         const schema: GraphQLSchema = await buildSchema({
             resolvers: [PostResolver, RegisterResolver] 
           })
-        const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res })});
+        const server = new ApolloServer({schema,context: ({ req, res }) => ({ req, res }), formatError: (error:GraphQLError)=>{
+          const {extensions, message} = error
+          if(extensions !=undefined){
+            const code = extensions["code"]
+            const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el:any)=>{
+              return el["constraints"]
+            }))
+            return { code, response, message};
+        }
+          return { message};
+        }});
         const app = express();
         await server.start();
 
