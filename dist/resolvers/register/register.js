@@ -55,7 +55,7 @@ let RegisterResolver = class RegisterResolver {
             if (!checkPassword) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");
             }
-            ctx.req.session.userId = user.id;
+            ctx.req.session.userId = "user.id";
             return user;
         });
     }

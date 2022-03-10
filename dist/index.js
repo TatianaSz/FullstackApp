@@ -21,6 +21,7 @@ const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./entity/User");
 const register_1 = require("./resolvers/register/register");
+const apollo_server_core_1 = require("apollo-server-core");
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const ioredis_1 = __importDefault(require("ioredis"));
@@ -42,7 +43,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const schema = yield (0, type_graphql_1.buildSchema)({
             resolvers: [main_1.PostResolver, register_1.RegisterResolver]
         });
-        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }), formatError: (error) => {
+        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }), plugins: [
+                (0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)(),
+            ], formatError: (error) => {
                 const { extensions, message } = error;
                 if (extensions != undefined && extensions["exception"]["validationErrors"] != undefined) {
                     const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el) => {
@@ -57,19 +60,20 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
         let redisClient = new ioredis_1.default();
         app.use((0, express_session_1.default)({
-            name: "ciq",
+            name: "test",
             store: new RedisStore({ client: redisClient }),
             secret: "keyboard cat",
             saveUninitialized: false,
             cookie: {
                 maxAge: 1000 * 3600 * 24 * 365 * 5,
                 httpOnly: true,
-                sameSite: "none",
-                secure: true,
+                sameSite: "lax"
             },
             resave: false,
         }));
-        server.applyMiddleware({ app });
+        server.applyMiddleware({
+            app,
+        });
         app.listen(8080, () => {
             console.log("app");
         });

@@ -6,6 +6,12 @@ import { LoginInput, RegisterInput } from "./validation";
 import { OwnValidationError } from "../../errors"
 import {TContext} from "../../types/Context"
 
+
+declare module 'express-session' {
+    interface SessionData {
+      userId: any;
+    }
+}
 @Resolver()
 export class RegisterResolver {
 
@@ -45,7 +51,7 @@ if(!checkPassword){
   throw new OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password")
 }
 
-ctx.req.session!.userId = user.id
+ctx.req.session.userId = "user.id"
   return user
 }
 }
