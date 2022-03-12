@@ -60,7 +60,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
         let redisClient = new ioredis_1.default();
         app.use((0, express_session_1.default)({
-            name: "test",
+            name: "qid",
             store: new RedisStore({ client: redisClient }),
             secret: "keyboard cat",
             saveUninitialized: false,

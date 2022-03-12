@@ -34,6 +34,15 @@ let RegisterResolver = class RegisterResolver {
     users() {
         return User_1.User.find();
     }
+    savedUsers(ctx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!ctx.req.session.userId) {
+                return undefined;
+            }
+            const user = yield User_1.User.findOne(ctx.req.session.userId);
+            return user;
+        });
+    }
     createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashed = yield bcryptjs_1.default.hash(password, 14);
@@ -55,7 +64,7 @@ let RegisterResolver = class RegisterResolver {
             if (!checkPassword) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");
             }
-            ctx.req.session.userId = "user.id";
+            ctx.req.session.userId = user.id;
             return user;
         });
     }
@@ -66,6 +75,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "users", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => User_1.User, { nullable: true }),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], RegisterResolver.prototype, "savedUsers", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => User_1.User),
     __param(0, (0, type_graphql_1.Arg)("input")),

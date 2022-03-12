@@ -56,7 +56,7 @@ const main =async () => {
       
       app.use(
             session({
-              name: "test",
+              name: "qid",
               store: new RedisStore({ client: redisClient}),
               secret: "keyboard cat",
               saveUninitialized: false,

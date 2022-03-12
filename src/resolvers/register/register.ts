@@ -20,6 +20,16 @@ users(): Promise<User[]> {
 return User.find();
 }
 
+@Query(() => User, {nullable:true})
+async savedUsers( @Ctx() ctx: TContext) {
+  if(!ctx.req.session!.userId){
+  return undefined
+  }
+ const user = await User.findOne(ctx.req.session.userId);
+  return user
+}
+
+
 @Mutation(() => User)
 async createUser(
   @Arg("input") {username, email, password}: RegisterInput)
@@ -51,7 +61,7 @@ if(!checkPassword){
   throw new OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password")
 }
 
-ctx.req.session.userId = "user.id"
+ctx.req.session.userId = user.id
   return user
 }
 }
