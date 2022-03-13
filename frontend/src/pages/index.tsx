@@ -1,5 +1,5 @@
 const Index = () => (
-  <div>frotent setup</div>
+  <div></div>
 )
 
 export default Index
