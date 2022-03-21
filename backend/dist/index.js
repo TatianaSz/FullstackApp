@@ -34,27 +34,29 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             username: "tatiana",
             password: "lireddit",
             database: "lireddit",
-            entities: [
-                Post_1.Post, User_1.User
-            ],
+            entities: [Post_1.Post, User_1.User],
             synchronize: true,
-            logging: true
+            logging: true,
         });
         const schema = yield (0, type_graphql_1.buildSchema)({
-            resolvers: [main_1.PostResolver, register_1.RegisterResolver]
+            resolvers: [main_1.PostResolver, register_1.RegisterResolver],
         });
-        const server = new apollo_server_express_1.ApolloServer({ schema, context: ({ req, res }) => ({ req, res }), plugins: [
-                (0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)(),
-            ], formatError: (error) => {
+        const server = new apollo_server_express_1.ApolloServer({
+            schema,
+            context: ({ req, res }) => ({ req, res }),
+            plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)()],
+            formatError: (error) => {
                 const { extensions, message } = error;
-                if (extensions != undefined && extensions["exception"]["validationErrors"] != undefined) {
+                if (extensions != undefined &&
+                    extensions["exception"]["validationErrors"] != undefined) {
                     const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el) => {
                         return el["constraints"];
                     }));
                     return { response, message };
                 }
                 return { extensions, message };
-            } });
+            },
+        });
         const app = (0, express_1.default)();
         yield server.start();
         const RedisStore = (0, connect_redis_1.default)(express_session_1.default);
@@ -67,12 +69,16 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             cookie: {
                 maxAge: 1000 * 3600 * 24 * 365 * 5,
                 httpOnly: true,
-                sameSite: "lax"
+                sameSite: "lax",
             },
             resave: false,
         }));
         server.applyMiddleware({
             app,
+            cors: {
+                origin: true,
+                credentials: true,
+            },
         });
         app.listen(8080, () => {
             console.log("app");
