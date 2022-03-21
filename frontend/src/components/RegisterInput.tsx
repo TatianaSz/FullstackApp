@@ -1,4 +1,5 @@
 import {
+  Box,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -17,7 +18,7 @@ export const RegisterInput: React.FC<RegisterInputProps> = ({
 }) => {
   const [field, meta] = useField(props);
   return (
-    <div>
+    <Box mt="4">
       <FormControl isInvalid={!!meta.touched && !!meta.error}>
         <FormLabel htmlFor={field.name}>{label}</FormLabel>
         <Input
@@ -28,6 +29,6 @@ export const RegisterInput: React.FC<RegisterInputProps> = ({
         />
         {meta.error ? <FormErrorMessage>{meta.error}</FormErrorMessage> : null}
       </FormControl>
-    </div>
+    </Box>
   );
 };
