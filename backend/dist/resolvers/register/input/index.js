@@ -9,28 +9,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginInput = exports.RegisterInput = void 0;
-const class_validator_1 = require("class-validator");
-const isEmailUsed_1 = require("../../validators/isEmailUsed");
+exports.LoginInput = exports.RegisterInput = exports.UserResponse = exports.ErrorObj = void 0;
+const User_1 = require("../../../entity/User");
 const type_graphql_1 = require("type-graphql");
+let ErrorObj = class ErrorObj {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], ErrorObj.prototype, "field", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], ErrorObj.prototype, "message", void 0);
+ErrorObj = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], ErrorObj);
+exports.ErrorObj = ErrorObj;
+let UserResponse = class UserResponse {
+};
+__decorate([
+    (0, type_graphql_1.Field)(() => User_1.User, { nullable: true }),
+    __metadata("design:type", User_1.User)
+], UserResponse.prototype, "user", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [ErrorObj], { nullable: true }),
+    __metadata("design:type", Array)
+], UserResponse.prototype, "errorArr", void 0);
+UserResponse = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], UserResponse);
+exports.UserResponse = UserResponse;
 let RegisterInput = class RegisterInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, class_validator_1.Length)(1, 30),
     __metadata("design:type", String)
 ], RegisterInput.prototype, "username", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, class_validator_1.IsEmail)(),
-    (0, isEmailUsed_1.isEmailUsed)({
-        message: 'Email is already in use',
-    }),
     __metadata("design:type", String)
 ], RegisterInput.prototype, "email", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, class_validator_1.MinLength)(5),
     __metadata("design:type", String)
 ], RegisterInput.prototype, "password", void 0);
 RegisterInput = __decorate([
@@ -41,12 +62,10 @@ let LoginInput = class LoginInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, class_validator_1.MinLength)(1),
     __metadata("design:type", String)
 ], LoginInput.prototype, "loginType", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, class_validator_1.MinLength)(5),
     __metadata("design:type", String)
 ], LoginInput.prototype, "password", void 0);
 LoginInput = __decorate([

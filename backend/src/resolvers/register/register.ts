@@ -1,15 +1,19 @@
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs";
 import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
-import { LoginInput, RegisterInput } from "./validation";
+import { ErrorObj, LoginInput, RegisterInput, UserResponse } from "./input";
 import { OwnValidationError } from "../../errors";
 import { TContext } from "../../types/Context";
+import { isMin } from "../validators";
 
 declare module "express-session" {
   interface SessionData {
     userId: any;
   }
 }
+
+const UserErrors: Array<ErrorObj> = [];
+
 @Resolver()
 export class RegisterResolver {
   @Query(() => [User])
@@ -26,17 +30,38 @@ export class RegisterResolver {
     return user;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async createUser(
     @Arg("input") { username, email, password }: RegisterInput
-  ): Promise<User> {
+  ): Promise<UserResponse> {
+    isMin(
+      username,
+      5,
+      {
+        field: "username",
+        message: "Username has to be longer than 5 characters!",
+      },
+      UserErrors
+    );
+    isMin(
+      email,
+      5,
+      {
+        field: "email",
+        message: "Email has to be longer than 5 characters!",
+      },
+      UserErrors
+    );
+    if (UserErrors.length >= 1) {
+      return { errorArr: UserErrors };
+    }
     const hashed = await bcrypt.hash(password, 14);
     const user = await User.create({
       username,
       email,
       password: hashed,
     }).save();
-    return user;
+    return { user };
   }
 
   @Mutation(() => User)

@@ -17,6 +17,12 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type ErrorObj = {
+  __typename?: 'ErrorObj';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
 export type LoginInput = {
   loginType: Scalars['String'];
   password: Scalars['String'];
@@ -25,7 +31,7 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createPost: Post;
-  createUser: User;
+  createUser: UserResponse;
   deletePost: Scalars['Boolean'];
   login: User;
   updatePost: Post;
@@ -93,6 +99,12 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errorArr?: Maybe<Array<ErrorObj>>;
+  user?: Maybe<User>;
+};
+
 export type RegisterUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
@@ -100,13 +112,19 @@ export type RegisterUserMutationVariables = Exact<{
 }>;
 
 
-export type RegisterUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', username: string } };
+export type RegisterUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', username: string } | null, errorArr?: Array<{ __typename?: 'ErrorObj', field: string, message: string }> | null } };
 
 
 export const RegisterUserDocument = gql`
     mutation RegisterUser($username: String!, $email: String!, $password: String!) {
   createUser(input: {username: $username, email: $email, password: $password}) {
-    username
+    user {
+      username
+    }
+    errorArr {
+      field
+      message
+    }
   }
 }
     `;
