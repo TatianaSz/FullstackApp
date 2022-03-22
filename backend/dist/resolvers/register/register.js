@@ -49,14 +49,16 @@ let RegisterResolver = class RegisterResolver {
             const user = yield User_1.User.create({
                 username,
                 email,
-                password: hashed
+                password: hashed,
             }).save();
             return user;
         });
     }
     login({ loginType, password }, ctx) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User_1.User.findOne({ where: [{ username: loginType }, { email: loginType }] });
+            const user = yield User_1.User.findOne({
+                where: [{ username: loginType }, { email: loginType }],
+            });
             if (!user) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "username", "doesUserExist", "User not found");
             }

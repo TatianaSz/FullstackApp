@@ -3,7 +3,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { PostResolver } from "./resolvers/main";
 import { buildSchema } from "type-graphql";
-import { GraphQLError, GraphQLSchema } from "graphql";
+import { GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
@@ -34,22 +34,6 @@ const main = async () => {
       schema,
       context: ({ req, res }) => ({ req, res }),
       plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-      formatError: (error: GraphQLError) => {
-        const { extensions, message } = error;
-        if (
-          extensions != undefined &&
-          extensions["exception"]["validationErrors"] != undefined
-        ) {
-          const response = Object.assign(
-            {},
-            ...extensions["exception"]["validationErrors"].map((el: any) => {
-              return el["constraints"];
-            })
-          );
-          return { response, message };
-        }
-        return { extensions, message };
-      },
     });
 
     const app = express();

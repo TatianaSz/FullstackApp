@@ -45,17 +45,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             schema,
             context: ({ req, res }) => ({ req, res }),
             plugins: [(0, apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground)()],
-            formatError: (error) => {
-                const { extensions, message } = error;
-                if (extensions != undefined &&
-                    extensions["exception"]["validationErrors"] != undefined) {
-                    const response = Object.assign({}, ...extensions["exception"]["validationErrors"].map((el) => {
-                        return el["constraints"];
-                    }));
-                    return { response, message };
-                }
-                return { extensions, message };
-            },
         });
         const app = (0, express_1.default)();
         yield server.start();

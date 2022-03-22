@@ -2,13 +2,12 @@ import React from "react";
 import { Form, Formik } from "formik";
 import { Box, Button } from "@chakra-ui/react";
 import { RegisterInput } from "../components/RegisterInput";
-import { useMutation } from "urql";
-import { REGISTER_MUTATION } from "../mutations";
+import { useRegisterUserMutation } from "../generated/graphql";
 
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
-  const [{}, register] = useMutation(REGISTER_MUTATION);
+  const [{}, register] = useRegisterUserMutation();
 
   function validateName(value) {
     let error;
@@ -21,9 +20,9 @@ const Register: React.FC<registerProps> = ({}) => {
     <Box mx="auto" maxW="sm" mt="5">
       <Formik
         initialValues={{ username: "", email: "", password: "" }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           console.log(values, actions);
-          return register(values);
+          const response = await register(values);
         }}
       >
         {(props) => (

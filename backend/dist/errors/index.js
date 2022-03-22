@@ -6,17 +6,16 @@ class ErrorStructure {
     constructor(property, constraints, message) {
         this.property = property;
         this.constraints = {
-            [constraints]: message
+            [constraints]: message,
         };
     }
 }
 class OwnValidationError extends apollo_server_errors_1.ApolloError {
     constructor(errorCode, property, constraints, message) {
         super("Custom validation error", errorCode);
-        this.extensions.exception =
-            { "validationErrors": [
-                    new ErrorStructure(property, constraints, message)
-                ] };
+        this.extensions.exception = {
+            validationErrors: [new ErrorStructure(property, constraints, message)],
+        };
     }
 }
 exports.OwnValidationError = OwnValidationError;
