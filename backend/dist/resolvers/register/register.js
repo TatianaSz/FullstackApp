@@ -48,14 +48,9 @@ let RegisterResolver = class RegisterResolver {
     createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             UserErrors = [];
-            (0, validators_1.isMin)(username, 5, {
-                field: "username",
-                message: "Username has to be longer than 5 characters!",
-            }, UserErrors);
-            (0, validators_1.isMin)(email, 5, {
-                field: "email",
-                message: "Email has to be longer than 5 characters!",
-            }, UserErrors);
+            (0, validators_1.isMin)(username, "Username", 4, UserErrors);
+            (0, validators_1.isMin)(password, "Password", 6, UserErrors);
+            (0, validators_1.isEmail)(email, "Email", UserErrors);
             if (UserErrors.length >= 1) {
                 return { errorArr: UserErrors };
             }
