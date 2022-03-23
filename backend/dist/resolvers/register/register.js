@@ -31,7 +31,7 @@ const type_graphql_1 = require("type-graphql");
 const input_1 = require("./input");
 const errors_1 = require("../../errors");
 const validators_1 = require("../validators");
-const UserErrors = [];
+let UserErrors = [];
 let RegisterResolver = class RegisterResolver {
     users() {
         return User_1.User.find();
@@ -47,6 +47,7 @@ let RegisterResolver = class RegisterResolver {
     }
     createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
+            UserErrors = [];
             (0, validators_1.isMin)(username, 5, {
                 field: "username",
                 message: "Username has to be longer than 5 characters!",

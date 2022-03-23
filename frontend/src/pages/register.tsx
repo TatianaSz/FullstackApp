@@ -22,8 +22,8 @@ const Register: React.FC<registerProps> = ({}) => {
         initialValues={{ username: "", email: "", password: "" }}
         onSubmit={async (values, actions) => {
           const response = await register(values);
-          if (response.error) {
-            console.log(response.error);
+          if (response.data.createUser.errorArr.length > 0) {
+            console.log(response.data.createUser.errorArr);
           }
         }}
       >

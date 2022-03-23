@@ -12,7 +12,7 @@ declare module "express-session" {
   }
 }
 
-const UserErrors: Array<ErrorObj> = [];
+let UserErrors: Array<ErrorObj> = [];
 
 @Resolver()
 export class RegisterResolver {
@@ -34,6 +34,7 @@ export class RegisterResolver {
   async createUser(
     @Arg("input") { username, email, password }: RegisterInput
   ): Promise<UserResponse> {
+    UserErrors = [];
     isMin(
       username,
       5,
