@@ -4,7 +4,7 @@ import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
 import { ErrorObj, LoginInput, RegisterInput, UserResponse } from "./input";
 import { OwnValidationError } from "../../errors";
 import { TContext } from "../../types/Context";
-import { isEmail, isMin } from "../validators";
+import { isEmail, isMin, isUsed } from "../validators";
 
 declare module "express-session" {
   interface SessionData {
@@ -38,6 +38,7 @@ export class RegisterResolver {
     isMin(username, "Username", 4, UserErrors);
     isMin(password, "Password", 6, UserErrors);
     isEmail(email, "Email", UserErrors);
+    await isUsed(email, "Email", UserErrors);
     if (UserErrors.length >= 1) {
       return { errorArr: UserErrors };
     }

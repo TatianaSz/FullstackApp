@@ -51,6 +51,7 @@ let RegisterResolver = class RegisterResolver {
             (0, validators_1.isMin)(username, "Username", 4, UserErrors);
             (0, validators_1.isMin)(password, "Password", 6, UserErrors);
             (0, validators_1.isEmail)(email, "Email", UserErrors);
+            yield (0, validators_1.isUsed)(email, "Email", UserErrors);
             if (UserErrors.length >= 1) {
                 return { errorArr: UserErrors };
             }
