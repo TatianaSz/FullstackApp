@@ -5,6 +5,8 @@ import { ErrorObj, LoginInput, RegisterInput, UserResponse } from "./input";
 import { OwnValidationError } from "../../errors";
 import { TContext } from "../../types/Context";
 import { isEmail, isMin, isUsed } from "../validators";
+import { randomBytes } from "crypto";
+import { UserToken } from "../../entity/Token";
 
 declare module "express-session" {
   interface SessionData {
@@ -43,11 +45,16 @@ export class RegisterResolver {
       return { errorArr: UserErrors };
     }
     const hashed = await bcrypt.hash(password, 14);
+    const newToken = randomBytes(16);
     const user = await User.create({
       username,
       email,
       validated: false,
       password: hashed,
+    }).save();
+    await UserToken.create({
+      token: newToken,
+      userId: user.id,
     }).save();
     return { user };
   }

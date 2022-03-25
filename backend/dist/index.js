@@ -35,7 +35,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             username: "tatiana",
             password: "lireddit",
             database: "lireddit",
-            entities: [Post_1.Post, User_1.User, Token_1.Token],
+            entities: [Post_1.Post, User_1.User, Token_1.UserToken],
             synchronize: true,
             logging: true,
         });

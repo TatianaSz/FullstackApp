@@ -54,7 +54,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => Token_1.Token, (token) => token.user),
+    (0, typeorm_1.OneToOne)(() => Token_1.UserToken, (token) => token.user),
     __metadata("design:type", User)
 ], User.prototype, "token", void 0);
 User = __decorate([

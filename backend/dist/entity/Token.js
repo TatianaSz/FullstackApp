@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Token = void 0;
+exports.UserToken = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
-let Token = class Token extends typeorm_1.BaseEntity {
+let UserToken = class UserToken extends typeorm_1.BaseEntity {
     constructor() {
         super(...arguments);
         this.expireAt = new Date(new Date().setHours(new Date().getHours() + 23));
@@ -23,24 +23,31 @@ __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Token.prototype, "id", void 0);
+], UserToken.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Token.prototype, "token", void 0);
+    (0, typeorm_1.Column)({
+        type: "bytea",
+        nullable: true,
+    }),
+    __metadata("design:type", Buffer)
+], UserToken.prototype, "token", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], Token.prototype, "expireAt", void 0);
+], UserToken.prototype, "expireAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], UserToken.prototype, "userId", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => User_1.User, (user) => user.token),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", User_1.User)
-], Token.prototype, "user", void 0);
-Token = __decorate([
+], UserToken.prototype, "user", void 0);
+UserToken = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()
-], Token);
-exports.Token = Token;
+], UserToken);
+exports.UserToken = UserToken;
 //# sourceMappingURL=Token.js.map

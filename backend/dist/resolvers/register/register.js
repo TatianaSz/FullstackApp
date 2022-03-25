@@ -31,6 +31,8 @@ const type_graphql_1 = require("type-graphql");
 const input_1 = require("./input");
 const errors_1 = require("../../errors");
 const validators_1 = require("../validators");
+const crypto_1 = require("crypto");
+const Token_1 = require("../../entity/Token");
 let UserErrors = [];
 let RegisterResolver = class RegisterResolver {
     users() {
@@ -56,11 +58,16 @@ let RegisterResolver = class RegisterResolver {
                 return { errorArr: UserErrors };
             }
             const hashed = yield bcryptjs_1.default.hash(password, 14);
+            const newToken = (0, crypto_1.randomBytes)(16);
             const user = yield User_1.User.create({
                 username,
                 email,
                 validated: false,
                 password: hashed,
+            }).save();
+            yield Token_1.UserToken.create({
+                token: newToken,
+                userId: user.id,
             }).save();
             return { user };
         });

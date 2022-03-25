@@ -13,7 +13,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
-import { Token } from "./entity/Token";
+import { UserToken } from "./entity/Token";
 
 const main = async () => {
   try {
@@ -24,7 +24,7 @@ const main = async () => {
       username: "tatiana",
       password: "lireddit",
       database: "lireddit",
-      entities: [Post, User, Token],
+      entities: [Post, User, UserToken],
       synchronize: true,
       logging: true,
     });

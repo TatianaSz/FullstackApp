@@ -14,11 +14,11 @@ const Token_1 = require("../../entity/Token");
 const type_graphql_1 = require("type-graphql");
 let TokenResolver = class TokenResolver {
     createToken() {
-        return Token_1.Token.create().save();
+        return Token_1.UserToken.create().save();
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Token_1.Token),
+    (0, type_graphql_1.Mutation)(() => Token_1.UserToken),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

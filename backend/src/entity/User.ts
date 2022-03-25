@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Token } from "./Token";
+import { UserToken } from "./Token";
 
 @ObjectType()
 @Entity()
@@ -37,6 +37,6 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @OneToOne(() => Token, (token) => token.user)
+  @OneToOne(() => UserToken, (token) => token.user)
   token: User;
 }
