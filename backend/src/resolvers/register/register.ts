@@ -46,6 +46,7 @@ export class RegisterResolver {
     const user = await User.create({
       username,
       email,
+      validated: false,
       password: hashed,
     }).save();
     return { user };

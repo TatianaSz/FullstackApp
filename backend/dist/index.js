@@ -25,6 +25,7 @@ const apollo_server_core_1 = require("apollo-server-core");
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const ioredis_1 = __importDefault(require("ioredis"));
+const Token_1 = require("./entity/Token");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
@@ -34,7 +35,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             username: "tatiana",
             password: "lireddit",
             database: "lireddit",
-            entities: [Post_1.Post, User_1.User],
+            entities: [Post_1.Post, User_1.User, Token_1.Token],
             synchronize: true,
             logging: true,
         });

@@ -59,6 +59,7 @@ let RegisterResolver = class RegisterResolver {
             const user = yield User_1.User.create({
                 username,
                 email,
+                validated: false,
                 password: hashed,
             }).save();
             return { user };

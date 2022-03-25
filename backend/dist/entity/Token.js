@@ -9,52 +9,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Token = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-let User = class User extends typeorm_1.BaseEntity {
+const User_1 = require("./User");
+let Token = class Token extends typeorm_1.BaseEntity {
     constructor() {
         super(...arguments);
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
+        this.expireAt = new Date(new Date().setHours(new Date().getHours() + 23));
     }
 };
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
+], Token.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Date)
-], User.prototype, "createdAt", void 0);
+    __metadata("design:type", String)
+], Token.prototype, "token", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
-], User.prototype, "updatedAt", void 0);
+], Token.prototype, "expireAt", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)({ unique: true }),
-    __metadata("design:type", String)
-], User.prototype, "username", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.Column)({ unique: true }),
-    __metadata("design:type", String)
-], User.prototype, "email", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Boolean)
-], User.prototype, "validated", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
-User = __decorate([
+    (0, typeorm_1.OneToOne)(() => User_1.User),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", User_1.User)
+], Token.prototype, "user", void 0);
+Token = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()
-], User);
-exports.User = User;
-//# sourceMappingURL=User.js.map
+], Token);
+exports.Token = Token;
+//# sourceMappingURL=Token.js.map
