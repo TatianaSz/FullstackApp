@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
-const main_1 = require("./resolvers/main");
+const post_1 = require("./resolvers/post/post");
 const type_graphql_1 = require("type-graphql");
 const Post_1 = require("./entity/Post");
 const typeorm_1 = require("typeorm");
@@ -40,7 +40,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             logging: true,
         });
         const schema = yield (0, type_graphql_1.buildSchema)({
-            resolvers: [main_1.PostResolver, register_1.RegisterResolver],
+            resolvers: [post_1.PostResolver, register_1.RegisterResolver],
         });
         const server = new apollo_server_express_1.ApolloServer({
             schema,

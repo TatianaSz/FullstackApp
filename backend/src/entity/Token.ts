@@ -23,7 +23,7 @@ export class Token extends BaseEntity {
   @Column()
   expireAt: Date = new Date(new Date().setHours(new Date().getHours() + 23));
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.token)
   @JoinColumn()
   user: User;
 }

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { PostResolver } from "./resolvers/main";
+import { PostResolver } from "./resolvers/post/post";
 import { buildSchema } from "type-graphql";
 import { GraphQLSchema } from "graphql";
 import { Post } from "./entity/Post";

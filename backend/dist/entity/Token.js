@@ -34,7 +34,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Token.prototype, "expireAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => User_1.User),
+    (0, typeorm_1.OneToOne)(() => User_1.User, (user) => user.token),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", User_1.User)
 ], Token.prototype, "user", void 0);
