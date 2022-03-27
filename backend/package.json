@@ -18,6 +18,8 @@
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
     "@types/node": "^17.0.15",
+    "@types/nodemailer": "^6.4.4",
+    "@types/nodemailer-sendgrid": "^1.0.0",
     "class-validator": "^0.13.2",
     "nodemon": "^2.0.15"
   },
@@ -30,6 +32,8 @@
     "express-session": "^1.17.2",
     "graphql": "15.3.0",
     "ioredis": "^4.28.5",
+    "nodemailer": "^6.7.3",
+    "nodemailer-sendgrid": "^1.0.3",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.5.0",

@@ -7,6 +7,8 @@ import { TContext } from "../../types/Context";
 import { isEmail, isMin, isUsed } from "../validators";
 import { randomBytes } from "crypto";
 import { UserToken } from "../../entity/Token";
+import nodemailer from "nodemailer";
+import nodemailerSendgrid from "nodemailer-sendgrid";
 
 declare module "express-session" {
   interface SessionData {
@@ -34,6 +36,7 @@ export class RegisterResolver {
 
   @Mutation(() => UserResponse)
   async createUser(
+    @Ctx() ctx: TContext,
     @Arg("input") { username, email, password }: RegisterInput
   ): Promise<UserResponse> {
     UserErrors = [];
@@ -52,10 +55,34 @@ export class RegisterResolver {
       validated: false,
       password: hashed,
     }).save();
-    await UserToken.create({
+    const token = await UserToken.create({
       token: newToken,
       userId: user.id,
     }).save();
+
+    const transporter = nodemailer.createTransport(
+      nodemailerSendgrid({
+        apiKey: "private key ;p",
+      })
+    );
+    var mailOptions = {
+      from: "plikichmura777@gmail.com",
+      to: user.email,
+      subject: "Account Verification Link",
+      text:
+        "Hello " +
+        ctx.req.body.name +
+        ",\n\n" +
+        "Please verify your account by clicking the link: \nhttp://" +
+        // ctx.req.headers.host +
+        "/confirmation/" +
+        user.email +
+        "/" +
+        //  token.token +
+        "\n\nThank You!\n",
+    };
+    transporter.sendMail(mailOptions);
+
     return { user };
   }
 

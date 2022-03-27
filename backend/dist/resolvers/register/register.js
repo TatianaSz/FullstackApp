@@ -33,6 +33,8 @@ const errors_1 = require("../../errors");
 const validators_1 = require("../validators");
 const crypto_1 = require("crypto");
 const Token_1 = require("../../entity/Token");
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const nodemailer_sendgrid_1 = __importDefault(require("nodemailer-sendgrid"));
 let UserErrors = [];
 let RegisterResolver = class RegisterResolver {
     users() {
@@ -47,7 +49,7 @@ let RegisterResolver = class RegisterResolver {
             return user;
         });
     }
-    createUser({ username, email, password }) {
+    createUser(ctx, { username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             UserErrors = [];
             (0, validators_1.isMin)(username, "Username", 4, UserErrors);
@@ -65,10 +67,27 @@ let RegisterResolver = class RegisterResolver {
                 validated: false,
                 password: hashed,
             }).save();
-            yield Token_1.UserToken.create({
+            const token = yield Token_1.UserToken.create({
                 token: newToken,
                 userId: user.id,
             }).save();
+            const transporter = nodemailer_1.default.createTransport((0, nodemailer_sendgrid_1.default)({
+                apiKey: "private key ;p",
+            }));
+            var mailOptions = {
+                from: "plikichmura777@gmail.com",
+                to: user.email,
+                subject: "Account Verification Link",
+                text: "Hello " +
+                    ctx.req.body.name +
+                    ",\n\n" +
+                    "Please verify your account by clicking the link: \nhttp://" +
+                    "/confirmation/" +
+                    user.email +
+                    "/" +
+                    "\n\nThank You!\n",
+            };
+            transporter.sendMail(mailOptions);
             return { user };
         });
     }
@@ -104,9 +123,10 @@ __decorate([
 ], RegisterResolver.prototype, "savedUsers", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => input_1.UserResponse),
-    __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(0, (0, type_graphql_1.Ctx)()),
+    __param(1, (0, type_graphql_1.Arg)("input")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [input_1.RegisterInput]),
+    __metadata("design:paramtypes", [Object, input_1.RegisterInput]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "createUser", null);
 __decorate([
