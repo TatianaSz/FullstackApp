@@ -17,11 +17,8 @@ export class UserToken extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column({
-    type: "bytea",
-    nullable: true,
-  })
-  token: Buffer;
+  @Column()
+  token: string;
 
   @Column()
   expireAt: Date = new Date(new Date().setHours(new Date().getHours() + 23));

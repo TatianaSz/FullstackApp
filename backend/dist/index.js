@@ -37,7 +37,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             database: "lireddit",
             entities: [Post_1.Post, User_1.User, Token_1.UserToken],
             synchronize: true,
-            logging: true,
+            logging: false,
         });
         const schema = yield (0, type_graphql_1.buildSchema)({
             resolvers: [post_1.PostResolver, register_1.RegisterResolver],
@@ -76,6 +76,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app.get("/", (_req, res) => {
             res.send("port 8080 working fine");
         });
+        app.get("/confirmation/:email/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+            res.send("token");
+            yield Token_1.UserToken.findOne({
+                where: { token: req.params.token },
+            });
+        }));
     }
     catch (error) {
         console.error(error);

@@ -26,7 +26,7 @@ const main = async () => {
       database: "lireddit",
       entities: [Post, User, UserToken],
       synchronize: true,
-      logging: true,
+      logging: false,
     });
     const schema: GraphQLSchema = await buildSchema({
       resolvers: [PostResolver, RegisterResolver],
@@ -71,6 +71,12 @@ const main = async () => {
     });
     app.get("/", (_req, res) => {
       res.send("port 8080 working fine");
+    });
+    app.get("/confirmation/:email/:token", async (req, res) => {
+      res.send("token");
+      await UserToken.findOne({
+        where: { token: req.params.token },
+      });
     });
   } catch (error) {
     console.error(error);

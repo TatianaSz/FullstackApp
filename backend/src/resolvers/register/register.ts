@@ -48,7 +48,7 @@ export class RegisterResolver {
       return { errorArr: UserErrors };
     }
     const hashed = await bcrypt.hash(password, 14);
-    const newToken = randomBytes(16);
+    const newToken = randomBytes(16).toString("hex");
     const user = await User.create({
       username,
       email,
@@ -62,23 +62,18 @@ export class RegisterResolver {
 
     const transporter = nodemailer.createTransport(
       nodemailerSendgrid({
-        apiKey: "private key ;p",
+        apiKey: "",
       })
     );
     var mailOptions = {
       from: "plikichmura777@gmail.com",
-      to: user.email,
+      to: "Tatiszulik777@gmail.com",
       subject: "Account Verification Link",
       text:
-        "Hello " +
-        ctx.req.body.name +
+        "Hello Friend" +
         ",\n\n" +
-        "Please verify your account by clicking the link: \nhttp://" +
-        // ctx.req.headers.host +
-        "/confirmation/" +
-        user.email +
-        "/" +
-        //  token.token +
+        "Please verify your account by clicking the link: " +
+        `http://${ctx.req.headers.host}/confirmation/${user.email}/${token.token}` +
         "\n\nThank You!\n",
     };
     transporter.sendMail(mailOptions);

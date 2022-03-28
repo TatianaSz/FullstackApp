@@ -26,11 +26,8 @@ __decorate([
 ], UserToken.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({
-        type: "bytea",
-        nullable: true,
-    }),
-    __metadata("design:type", Buffer)
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
 ], UserToken.prototype, "token", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
