@@ -1,3 +1,4 @@
+import { UserToken } from "../../entity/Token";
 import { User } from "../../entity/User";
 import { ErrorObj } from "../register/input";
 
@@ -35,6 +36,21 @@ export async function isUsed(
     errorArray.push({
       field: field,
       message: `${field} is already used!`,
+    });
+  }
+}
+
+export async function isExpired(
+  token: UserToken,
+  field: string,
+  errorArray: ErrorObj[]
+) {
+  const expirationDate = new Date(token.expireAt);
+  const currentDay = new Date();
+  if (expirationDate > currentDay) {
+    errorArray.push({
+      field: field,
+      message: `Token is expired!`,
     });
   }
 }

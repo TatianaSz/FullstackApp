@@ -35,6 +35,7 @@ export type Mutation = {
   deletePost: Scalars['Boolean'];
   login: User;
   updatePost: Post;
+  validToken: TokenValidationResponse;
 };
 
 
@@ -61,6 +62,12 @@ export type MutationLoginArgs = {
 export type MutationUpdatePostArgs = {
   id: Scalars['Float'];
   name?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationValidTokenArgs = {
+  email: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type Post = {
@@ -90,6 +97,12 @@ export type RegisterInput = {
   username: Scalars['String'];
 };
 
+export type TokenValidationResponse = {
+  __typename?: 'TokenValidationResponse';
+  errorArr?: Maybe<Array<ErrorObj>>;
+  token?: Maybe<UserToken>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -105,6 +118,12 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type UserToken = {
+  __typename?: 'UserToken';
+  id: Scalars['ID'];
+  token: Scalars['String'];
+};
+
 export type RegisterUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
@@ -113,6 +132,14 @@ export type RegisterUserMutationVariables = Exact<{
 
 
 export type RegisterUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'UserResponse', user?: { __typename?: 'User', username: string } | null, errorArr?: Array<{ __typename?: 'ErrorObj', field: string, message: string }> | null } };
+
+export type ValidateMutationVariables = Exact<{
+  userToken: Scalars['String'];
+  email: Scalars['String'];
+}>;
+
+
+export type ValidateMutation = { __typename?: 'Mutation', validToken: { __typename?: 'TokenValidationResponse', token?: { __typename?: 'UserToken', id: string } | null, errorArr?: Array<{ __typename?: 'ErrorObj', field: string, message: string }> | null } };
 
 
 export const RegisterUserDocument = gql`
@@ -131,4 +158,21 @@ export const RegisterUserDocument = gql`
 
 export function useRegisterUserMutation() {
   return Urql.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument);
+};
+export const ValidateDocument = gql`
+    mutation Validate($userToken: String!, $email: String!) {
+  validToken(token: $userToken, email: $email) {
+    token {
+      id
+    }
+    errorArr {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useValidateMutation() {
+  return Urql.useMutation<ValidateMutation, ValidateMutationVariables>(ValidateDocument);
 };

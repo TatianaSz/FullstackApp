@@ -49,7 +49,7 @@ let RegisterResolver = class RegisterResolver {
             return user;
         });
     }
-    createUser(ctx, { username, email, password }) {
+    createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             UserErrors = [];
             (0, validators_1.isMin)(username, "Username", 4, UserErrors);
@@ -81,7 +81,7 @@ let RegisterResolver = class RegisterResolver {
                 text: "Hello Friend" +
                     ",\n\n" +
                     "Please verify your account by clicking the link: " +
-                    `http://${ctx.req.headers.host}/confirmation/${user.email}/${token.token}` +
+                    `http://localhost:3000/confirmation/${user.email}/${token.token}` +
                     "\n\nThank You!\n",
             };
             transporter.sendMail(mailOptions);
@@ -120,10 +120,9 @@ __decorate([
 ], RegisterResolver.prototype, "savedUsers", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => input_1.UserResponse),
-    __param(0, (0, type_graphql_1.Ctx)()),
-    __param(1, (0, type_graphql_1.Arg)("input")),
+    __param(0, (0, type_graphql_1.Arg)("input")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, input_1.RegisterInput]),
+    __metadata("design:paramtypes", [input_1.RegisterInput]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "createUser", null);
 __decorate([

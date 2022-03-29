@@ -1,0 +1,11 @@
+mutation Validate($userToken: String!, $email: String!) {
+  validToken(token: $userToken, email: $email) {
+    token {
+      id
+    }
+    errorArr {
+      field
+      message
+    }
+  }
+}

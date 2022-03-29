@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isUsed = exports.isEmail = exports.isMin = void 0;
+exports.isExpired = exports.isUsed = exports.isEmail = exports.isMin = void 0;
 const User_1 = require("../../entity/User");
 function isMin(elementToValidate, field, lengthOfElement, errorArray) {
     if (elementToValidate.length < lengthOfElement) {
@@ -44,4 +44,17 @@ function isUsed(email, field, errorArray) {
     });
 }
 exports.isUsed = isUsed;
+function isExpired(token, field, errorArray) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const expirationDate = new Date(token.expireAt);
+        const currentDay = new Date();
+        if (expirationDate > currentDay) {
+            errorArray.push({
+                field: field,
+                message: `Token is expired!`,
+            });
+        }
+    });
+}
+exports.isExpired = isExpired;
 //# sourceMappingURL=index.js.map

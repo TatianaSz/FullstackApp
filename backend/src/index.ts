@@ -14,6 +14,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import { UserToken } from "./entity/Token";
+import { TokenResolver } from "./resolvers/token/token";
 
 const main = async () => {
   try {
@@ -26,10 +27,10 @@ const main = async () => {
       database: "lireddit",
       entities: [Post, User, UserToken],
       synchronize: true,
-      logging: false,
+      logging: true,
     });
     const schema: GraphQLSchema = await buildSchema({
-      resolvers: [PostResolver, RegisterResolver],
+      resolvers: [PostResolver, RegisterResolver, TokenResolver],
     });
     const server = new ApolloServer({
       schema,
@@ -71,12 +72,6 @@ const main = async () => {
     });
     app.get("/", (_req, res) => {
       res.send("port 8080 working fine");
-    });
-    app.get("/confirmation/:email/:token", async (req, res) => {
-      res.send("token");
-      await UserToken.findOne({
-        where: { token: req.params.token },
-      });
     });
   } catch (error) {
     console.error(error);

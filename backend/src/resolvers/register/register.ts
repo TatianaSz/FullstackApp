@@ -36,7 +36,6 @@ export class RegisterResolver {
 
   @Mutation(() => UserResponse)
   async createUser(
-    @Ctx() ctx: TContext,
     @Arg("input") { username, email, password }: RegisterInput
   ): Promise<UserResponse> {
     UserErrors = [];
@@ -73,7 +72,7 @@ export class RegisterResolver {
         "Hello Friend" +
         ",\n\n" +
         "Please verify your account by clicking the link: " +
-        `http://${ctx.req.headers.host}/confirmation/${user.email}/${token.token}` +
+        `http://localhost:3000/confirmation/${user.email}/${token.token}` +
         "\n\nThank You!\n",
     };
     transporter.sendMail(mailOptions);

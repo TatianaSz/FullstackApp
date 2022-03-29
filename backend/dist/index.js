@@ -26,6 +26,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const ioredis_1 = __importDefault(require("ioredis"));
 const Token_1 = require("./entity/Token");
+const token_1 = require("./resolvers/token/token");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
@@ -37,10 +38,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             database: "lireddit",
             entities: [Post_1.Post, User_1.User, Token_1.UserToken],
             synchronize: true,
-            logging: false,
+            logging: true,
         });
         const schema = yield (0, type_graphql_1.buildSchema)({
-            resolvers: [post_1.PostResolver, register_1.RegisterResolver],
+            resolvers: [post_1.PostResolver, register_1.RegisterResolver, token_1.TokenResolver],
         });
         const server = new apollo_server_express_1.ApolloServer({
             schema,
@@ -76,12 +77,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         app.get("/", (_req, res) => {
             res.send("port 8080 working fine");
         });
-        app.get("/confirmation/:email/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-            res.send("token");
-            yield Token_1.UserToken.findOne({
-                where: { token: req.params.token },
-            });
-        }));
     }
     catch (error) {
         console.error(error);

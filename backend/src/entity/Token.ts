@@ -1,3 +1,4 @@
+import { ErrorObj } from "../resolvers/register/input";
 import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -17,7 +18,7 @@ export class UserToken extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   token: string;
 
   @Column()
@@ -29,4 +30,13 @@ export class UserToken extends BaseEntity {
   @OneToOne(() => User, (user) => user.token)
   @JoinColumn()
   user: User;
+}
+
+@ObjectType()
+export class TokenValidationResponse {
+  @Field(() => UserToken, { nullable: true })
+  token?: UserToken;
+
+  @Field(() => [ErrorObj], { nullable: true })
+  errorArr?: ErrorObj[];
 }

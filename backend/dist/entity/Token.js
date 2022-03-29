@@ -9,7 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserToken = void 0;
+exports.TokenValidationResponse = exports.UserToken = void 0;
+const input_1 = require("../resolvers/register/input");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
@@ -26,7 +27,7 @@ __decorate([
 ], UserToken.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], UserToken.prototype, "token", void 0);
 __decorate([
@@ -47,4 +48,18 @@ UserToken = __decorate([
     (0, typeorm_1.Entity)()
 ], UserToken);
 exports.UserToken = UserToken;
+let TokenValidationResponse = class TokenValidationResponse {
+};
+__decorate([
+    (0, type_graphql_1.Field)(() => UserToken, { nullable: true }),
+    __metadata("design:type", UserToken)
+], TokenValidationResponse.prototype, "token", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [input_1.ErrorObj], { nullable: true }),
+    __metadata("design:type", Array)
+], TokenValidationResponse.prototype, "errorArr", void 0);
+TokenValidationResponse = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], TokenValidationResponse);
+exports.TokenValidationResponse = TokenValidationResponse;
 //# sourceMappingURL=Token.js.map
