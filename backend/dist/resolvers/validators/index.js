@@ -48,7 +48,7 @@ function isExpired(token, field, errorArray) {
     return __awaiter(this, void 0, void 0, function* () {
         const expirationDate = new Date(token.expireAt);
         const currentDay = new Date();
-        if (expirationDate > currentDay) {
+        if (expirationDate < currentDay) {
             errorArray.push({
                 field: field,
                 message: `Token is expired!`,

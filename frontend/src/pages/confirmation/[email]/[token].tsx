@@ -12,12 +12,12 @@ const ValidateEmail: NextPage<{ email: string; token: string }> = ({
     <Box mx="auto" maxW="sm" mt="5">
       <button
         onClick={() => {
-          validateToken({ userToken: token, email });
+          validateToken({ userToken: token, email: email });
         }}
       >
         {token}
       </button>
-      <div>{typeof token}</div>
+      <div>{email}</div>
     </Box>
   );
 };

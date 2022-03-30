@@ -25,19 +25,25 @@ exports.TokenResolver = void 0;
 const Token_1 = require("../../entity/Token");
 const type_graphql_1 = require("type-graphql");
 const validators_1 = require("../validators");
-const TokenErrors = [];
+const User_1 = require("../../entity/User");
+let TokenErrors = [];
 let TokenResolver = class TokenResolver {
     validToken(email, token) {
         return __awaiter(this, void 0, void 0, function* () {
+            TokenErrors = [];
             const foundToken = yield Token_1.UserToken.findOne({
                 where: { token: token },
             });
             if (foundToken) {
-                foundToken.user.email === email ? { token: foundToken } : undefined;
                 (0, validators_1.isExpired)(foundToken, "token", TokenErrors);
-            }
-            if (TokenErrors.length >= 1) {
-                return { errorArr: TokenErrors };
+                if (TokenErrors.length >= 1) {
+                    return { errorArr: TokenErrors };
+                }
+                const validatingUser = yield User_1.User.findOne(foundToken.userId);
+                if (validatingUser) {
+                    if (validatingUser.email === email)
+                        return { token: foundToken };
+                }
             }
             return undefined;
         });
