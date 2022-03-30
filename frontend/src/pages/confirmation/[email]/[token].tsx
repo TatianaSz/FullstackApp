@@ -1,7 +1,8 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useValidateMutation } from "../../../generated/graphql";
+import styles from "./../../../styles/token.module.css";
 
 const ValidateEmail: NextPage<{ email: string; token: string }> = ({
   email,
@@ -9,7 +10,7 @@ const ValidateEmail: NextPage<{ email: string; token: string }> = ({
 }) => {
   const [, validateToken] = useValidateMutation();
   return (
-    <Box mx="auto" maxW="sm" mt="5">
+    <Container className={styles.background} mx="auto" maxW="full" pt="5">
       <button
         onClick={() => {
           validateToken({ userToken: token, email: email });
@@ -18,7 +19,7 @@ const ValidateEmail: NextPage<{ email: string; token: string }> = ({
         {token}
       </button>
       <div>{email}</div>
-    </Box>
+    </Container>
   );
 };
 

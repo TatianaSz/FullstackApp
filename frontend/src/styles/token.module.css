@@ -1,0 +1,7 @@
+.background {
+  height: 100vh;
+  background-color: #86eed5;
+  background-image: url("./background.svg");
+  background-attachment: fixed;
+  background-size: cover;
+}

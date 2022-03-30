@@ -9,3 +9,4 @@
 - PostgreSQL as main database
 - Redis for caching
 - Next.js
+- i18next
