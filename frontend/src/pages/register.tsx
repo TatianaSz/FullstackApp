@@ -3,10 +3,12 @@ import { Form, Formik } from "formik";
 import { Box, Button } from "@chakra-ui/react";
 import { RegisterInput } from "../components/RegisterInput";
 import { useRegisterUserMutation } from "../generated/graphql";
+import { useTranslation } from "react-i18next";
 
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
+  const { t, i18n } = useTranslation();
   const [{}, register] = useRegisterUserMutation();
 
   function validateName(value) {
@@ -18,6 +20,7 @@ const Register: React.FC<registerProps> = ({}) => {
   }
   return (
     <Box mx="auto" maxW="sm" mt="5">
+      <div>{t("test")}</div>
       <Formik
         initialValues={{ username: "", email: "", password: "" }}
         onSubmit={async (values, actions) => {
@@ -36,6 +39,11 @@ const Register: React.FC<registerProps> = ({}) => {
             />
             <RegisterInput name="email" label="Email" />
             <RegisterInput name="password" label="Password" type="password" />
+            <RegisterInput
+              name="confirmPassword"
+              label="Confirm password"
+              type="password"
+            />
             <Button
               mt={4}
               colorScheme="teal"

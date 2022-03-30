@@ -1,6 +1,7 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import { createClient, Provider } from "urql";
 import theme from "../theme";
+import "./i18n";
 
 const client = createClient({
   url: "http://localhost:8080/graphql",
