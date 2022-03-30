@@ -96,6 +96,7 @@ let RegisterResolver = class RegisterResolver {
             if (!user) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "username", "doesUserExist", "User not found");
             }
+            (0, validators_1.canLogin)(user, "Token", UserErrors);
             const checkPassword = yield bcryptjs_1.default.compare(password, user.password);
             if (!checkPassword) {
                 throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");

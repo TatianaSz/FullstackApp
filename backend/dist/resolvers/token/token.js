@@ -35,18 +35,28 @@ let TokenResolver = class TokenResolver {
                 where: { token: token },
             });
             if (foundToken) {
-                (0, validators_1.isExpired)(foundToken, "token", TokenErrors);
+                (0, validators_1.isExpired)(foundToken, "Token", TokenErrors);
                 if (TokenErrors.length >= 1) {
                     return { errorArr: TokenErrors };
                 }
                 const validatingUser = yield User_1.User.findOne(foundToken.userId);
                 if (validatingUser) {
-                    if (validatingUser.email === email)
+                    (0, validators_1.isVerified)(validatingUser, "Token", TokenErrors);
+                    if (TokenErrors.length >= 1) {
+                        return { errorArr: TokenErrors };
+                    }
+                    if (validatingUser.email === email) {
+                        validatingUser.validated = true;
+                        validatingUser.save();
                         return { token: foundToken };
+                    }
                 }
             }
             return undefined;
         });
+    }
+    resendToken() {
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 };
 __decorate([
@@ -57,6 +67,12 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], TokenResolver.prototype, "validToken", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Token_1.TokenValidationResponse),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TokenResolver.prototype, "resendToken", null);
 TokenResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], TokenResolver);

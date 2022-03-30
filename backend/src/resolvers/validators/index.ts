@@ -40,6 +40,19 @@ export async function isUsed(
   }
 }
 
+export async function canLogin(
+  user: User,
+  field: string,
+  errorArray: ErrorObj[]
+) {
+  if (!user.validated) {
+    errorArray.push({
+      field: field,
+      message: `User not verified, can't log in!`,
+    });
+  }
+}
+
 export async function isExpired(
   token: UserToken,
   field: string,
@@ -51,6 +64,18 @@ export async function isExpired(
     errorArray.push({
       field: field,
       message: `Token is expired!`,
+    });
+  }
+}
+export async function isVerified(
+  user: User,
+  field: string,
+  errorArray: ErrorObj[]
+) {
+  if (user.validated) {
+    errorArray.push({
+      field: field,
+      message: `User is already verified, please log in`,
     });
   }
 }

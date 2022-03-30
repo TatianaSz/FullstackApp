@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isExpired = exports.isUsed = exports.isEmail = exports.isMin = void 0;
+exports.isVerified = exports.isExpired = exports.canLogin = exports.isUsed = exports.isEmail = exports.isMin = void 0;
 const User_1 = require("../../entity/User");
 function isMin(elementToValidate, field, lengthOfElement, errorArray) {
     if (elementToValidate.length < lengthOfElement) {
@@ -44,6 +44,17 @@ function isUsed(email, field, errorArray) {
     });
 }
 exports.isUsed = isUsed;
+function canLogin(user, field, errorArray) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!user.validated) {
+            errorArray.push({
+                field: field,
+                message: `User not verified, can't log in!`,
+            });
+        }
+    });
+}
+exports.canLogin = canLogin;
 function isExpired(token, field, errorArray) {
     return __awaiter(this, void 0, void 0, function* () {
         const expirationDate = new Date(token.expireAt);
@@ -57,4 +68,15 @@ function isExpired(token, field, errorArray) {
     });
 }
 exports.isExpired = isExpired;
+function isVerified(user, field, errorArray) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (user.validated) {
+            errorArray.push({
+                field: field,
+                message: `User is already verified, please log in`,
+            });
+        }
+    });
+}
+exports.isVerified = isVerified;
 //# sourceMappingURL=index.js.map

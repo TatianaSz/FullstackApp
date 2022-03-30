@@ -4,7 +4,7 @@ import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
 import { ErrorObj, LoginInput, RegisterInput, UserResponse } from "./input";
 import { OwnValidationError } from "../../errors";
 import { TContext } from "../../types/Context";
-import { isEmail, isMin, isUsed } from "../validators";
+import { canLogin, isEmail, isMin, isUsed } from "../validators";
 import { randomBytes } from "crypto";
 import { UserToken } from "../../entity/Token";
 import nodemailer from "nodemailer";
@@ -89,6 +89,7 @@ export class RegisterResolver {
       where: [{ username: loginType }, { email: loginType }],
     });
 
+    //TODO update this to error array
     if (!user) {
       throw new OwnValidationError(
         "LOGIN_FAILED",
@@ -97,6 +98,7 @@ export class RegisterResolver {
         "User not found"
       );
     }
+    canLogin(user, "Token", UserErrors);
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
       throw new OwnValidationError(
