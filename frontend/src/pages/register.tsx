@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [{}, register] = useRegisterUserMutation();
 
   function validateName(value) {

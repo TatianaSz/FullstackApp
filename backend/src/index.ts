@@ -1,30 +1,31 @@
-import "reflect-metadata";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { PostResolver } from "./resolvers/post/post";
-import { buildSchema } from "type-graphql";
-import { GraphQLSchema } from "graphql";
-import { Post } from "./entity/Post";
-import { createConnection } from "typeorm";
-import { User } from "./entity/User";
-import { RegisterResolver } from "./resolvers/register/register";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import 'reflect-metadata';
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import { PostResolver } from './resolvers/post/post';
+import { buildSchema } from 'type-graphql';
+import { GraphQLSchema } from 'graphql';
+import { Post } from './entity/Post';
+import { createConnection } from 'typeorm';
+import { User } from './entity/User';
+import { RegisterResolver } from './resolvers/register/register';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
-import session from "express-session";
-import connectRedis from "connect-redis";
-import Redis from "ioredis";
-import { UserToken } from "./entity/Token";
-import { TokenResolver } from "./resolvers/token/token";
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+import Redis from 'ioredis';
+import { UserToken } from './entity/Token';
+import { TokenResolver } from './resolvers/token/token';
+import { username, password } from '../../conf';
 
 const main = async () => {
   try {
     await createConnection({
-      type: "postgres",
-      host: "localhost",
+      type: 'postgres',
+      host: 'localhost',
       port: 5432,
-      username: "tatiana",
-      password: "lireddit",
-      database: "lireddit",
+      username: username,
+      password: password,
+      database: 'lireddit',
       entities: [Post, User, UserToken],
       synchronize: true,
       logging: true,
@@ -46,14 +47,14 @@ const main = async () => {
 
     app.use(
       session({
-        name: "qid",
+        name: 'qid',
         store: new RedisStore({ client: redisClient }),
-        secret: "keyboard cat",
+        secret: 'keyboard cat',
         saveUninitialized: false,
         cookie: {
-          maxAge: 1000 * 3600 * 24 * 365 * 5,
+          maxAge: 1000 * 3600 * 24 * 365 * 6,
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: 'lax',
         },
         resave: false,
       })
@@ -68,10 +69,10 @@ const main = async () => {
     });
 
     app.listen(8080, () => {
-      console.log("app");
+      console.log('app');
     });
-    app.get("/", (_req, res) => {
-      res.send("port 8080 working fine");
+    app.get('/', (_req, res) => {
+      res.send('port 8080 working fine');
     });
   } catch (error) {
     console.error(error);

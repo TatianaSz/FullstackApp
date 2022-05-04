@@ -35,6 +35,7 @@ const crypto_1 = require("crypto");
 const Token_1 = require("../../entity/Token");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const nodemailer_sendgrid_1 = __importDefault(require("nodemailer-sendgrid"));
+const conf_1 = require("../../../../conf");
 let UserErrors = [];
 let RegisterResolver = class RegisterResolver {
     users() {
@@ -52,15 +53,15 @@ let RegisterResolver = class RegisterResolver {
     createUser({ username, email, password }) {
         return __awaiter(this, void 0, void 0, function* () {
             UserErrors = [];
-            (0, validators_1.isMin)(username, "Username", 4, UserErrors);
-            (0, validators_1.isMin)(password, "Password", 6, UserErrors);
-            (0, validators_1.isEmail)(email, "Email", UserErrors);
-            yield (0, validators_1.isUsed)(email, "Email", UserErrors);
+            (0, validators_1.isMin)(username, 'Username', 4, UserErrors);
+            (0, validators_1.isMin)(password, 'Password', 6, UserErrors);
+            (0, validators_1.isEmail)(email, 'Email', UserErrors);
+            yield (0, validators_1.isUsed)(email, 'Email', UserErrors);
             if (UserErrors.length >= 1) {
                 return { errorArr: UserErrors };
             }
             const hashed = yield bcryptjs_1.default.hash(password, 14);
-            const newToken = (0, crypto_1.randomBytes)(16).toString("hex");
+            const newToken = (0, crypto_1.randomBytes)(16).toString('hex');
             const user = yield User_1.User.create({
                 username,
                 email,
@@ -72,17 +73,17 @@ let RegisterResolver = class RegisterResolver {
                 userId: user.id,
             }).save();
             const transporter = nodemailer_1.default.createTransport((0, nodemailer_sendgrid_1.default)({
-                apiKey: "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",
+                apiKey: conf_1.apiKey,
             }));
             var mailOptions = {
-                from: "plikichmura777@gmail.com",
-                to: "Tatiszulik777@gmail.com",
-                subject: "Account Verification Link",
-                text: "Hello Friend" +
-                    ",\n\n" +
-                    "Please verify your account by clicking the link: " +
+                from: conf_1.emailFrom,
+                to: conf_1.exampleEmailTo,
+                subject: 'Account Verification Link',
+                text: 'Hello Friend' +
+                    ',\n\n' +
+                    'Please verify your account by clicking the link: ' +
                     `http://localhost:3000/confirmation/${user.email}/${token.token}` +
-                    "\n\nThank You!\n",
+                    '\n\nThank You!\n',
             };
             transporter.sendMail(mailOptions);
             return { user };
@@ -94,12 +95,12 @@ let RegisterResolver = class RegisterResolver {
                 where: [{ username: loginType }, { email: loginType }],
             });
             if (!user) {
-                throw new errors_1.OwnValidationError("LOGIN_FAILED", "username", "doesUserExist", "User not found");
+                throw new errors_1.OwnValidationError('LOGIN_FAILED', 'username', 'doesUserExist', 'User not found');
             }
-            (0, validators_1.canLogin)(user, "Token", UserErrors);
+            (0, validators_1.canLogin)(user, 'Token', UserErrors);
             const checkPassword = yield bcryptjs_1.default.compare(password, user.password);
             if (!checkPassword) {
-                throw new errors_1.OwnValidationError("LOGIN_FAILED", "password", "isValidPassword", "Invalid password");
+                throw new errors_1.OwnValidationError('LOGIN_FAILED', 'password', 'isValidPassword', 'Invalid password');
             }
             ctx.req.session.userId = user.id;
             return user;
@@ -121,14 +122,14 @@ __decorate([
 ], RegisterResolver.prototype, "savedUsers", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => input_1.UserResponse),
-    __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(0, (0, type_graphql_1.Arg)('input')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [input_1.RegisterInput]),
     __metadata("design:returntype", Promise)
 ], RegisterResolver.prototype, "createUser", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => User_1.User),
-    __param(0, (0, type_graphql_1.Arg)("input")),
+    __param(0, (0, type_graphql_1.Arg)('input')),
     __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [input_1.LoginInput, Object]),

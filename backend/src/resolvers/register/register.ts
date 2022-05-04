@@ -1,16 +1,17 @@
-import { User } from "../../entity/User";
-import bcrypt from "bcryptjs";
-import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
-import { ErrorObj, LoginInput, RegisterInput, UserResponse } from "./input";
-import { OwnValidationError } from "../../errors";
-import { TContext } from "../../types/Context";
-import { canLogin, isEmail, isMin, isUsed } from "../validators";
-import { randomBytes } from "crypto";
-import { UserToken } from "../../entity/Token";
-import nodemailer from "nodemailer";
-import nodemailerSendgrid from "nodemailer-sendgrid";
+import { User } from '../../entity/User';
+import bcrypt from 'bcryptjs';
+import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql';
+import { ErrorObj, LoginInput, RegisterInput, UserResponse } from './input';
+import { OwnValidationError } from '../../errors';
+import { TContext } from '../../types/Context';
+import { canLogin, isEmail, isMin, isUsed } from '../validators';
+import { randomBytes } from 'crypto';
+import { UserToken } from '../../entity/Token';
+import nodemailer from 'nodemailer';
+import nodemailerSendgrid from 'nodemailer-sendgrid';
+import { apiKey, emailFrom, exampleEmailTo } from '../../../../conf';
 
-declare module "express-session" {
+declare module 'express-session' {
   interface SessionData {
     userId: any;
   }
@@ -36,18 +37,18 @@ export class RegisterResolver {
 
   @Mutation(() => UserResponse)
   async createUser(
-    @Arg("input") { username, email, password }: RegisterInput
+    @Arg('input') { username, email, password }: RegisterInput
   ): Promise<UserResponse> {
     UserErrors = [];
-    isMin(username, "Username", 4, UserErrors);
-    isMin(password, "Password", 6, UserErrors);
-    isEmail(email, "Email", UserErrors);
-    await isUsed(email, "Email", UserErrors);
+    isMin(username, 'Username', 4, UserErrors);
+    isMin(password, 'Password', 6, UserErrors);
+    isEmail(email, 'Email', UserErrors);
+    await isUsed(email, 'Email', UserErrors);
     if (UserErrors.length >= 1) {
       return { errorArr: UserErrors };
     }
     const hashed = await bcrypt.hash(password, 14);
-    const newToken = randomBytes(16).toString("hex");
+    const newToken = randomBytes(16).toString('hex');
     const user = await User.create({
       username,
       email,
@@ -61,19 +62,19 @@ export class RegisterResolver {
 
     const transporter = nodemailer.createTransport(
       nodemailerSendgrid({
-        apiKey: "",
+        apiKey: apiKey,
       })
     );
     var mailOptions = {
-      from: "plikichmura777@gmail.com",
-      to: "Tatiszulik777@gmail.com",
-      subject: "Account Verification Link",
+      from: emailFrom,
+      to: exampleEmailTo,
+      subject: 'Account Verification Link',
       text:
-        "Hello Friend" +
-        ",\n\n" +
-        "Please verify your account by clicking the link: " +
+        'Hello Friend' +
+        ',\n\n' +
+        'Please verify your account by clicking the link: ' +
         `http://localhost:3000/confirmation/${user.email}/${token.token}` +
-        "\n\nThank You!\n",
+        '\n\nThank You!\n',
     };
     transporter.sendMail(mailOptions);
 
@@ -82,7 +83,7 @@ export class RegisterResolver {
 
   @Mutation(() => User)
   async login(
-    @Arg("input") { loginType, password }: LoginInput,
+    @Arg('input') { loginType, password }: LoginInput,
     @Ctx() ctx: TContext
   ): Promise<User> {
     const user = await User.findOne({
@@ -92,20 +93,20 @@ export class RegisterResolver {
     //TODO update this to error array
     if (!user) {
       throw new OwnValidationError(
-        "LOGIN_FAILED",
-        "username",
-        "doesUserExist",
-        "User not found"
+        'LOGIN_FAILED',
+        'username',
+        'doesUserExist',
+        'User not found'
       );
     }
-    canLogin(user, "Token", UserErrors);
+    canLogin(user, 'Token', UserErrors);
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
       throw new OwnValidationError(
-        "LOGIN_FAILED",
-        "password",
-        "isValidPassword",
-        "Invalid password"
+        'LOGIN_FAILED',
+        'password',
+        'isValidPassword',
+        'Invalid password'
       );
     }
 

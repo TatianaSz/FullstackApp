@@ -1,3 +1,13 @@
 {
-  "test": "testowanie"
+  "token": {
+    "validated": {
+      "main": "Email zweryfikowany!",
+      "message": "Twoje konto zostało utworzone!"
+    },
+    "failed": {
+      "main": "Oops, coś poszło nie tak",
+      "message": "Proszę, sprawdź wiadomość co poszło nie tak lub skontaktuj sie z nami"
+    },
+    "goBack": "Powrót na stronę główną"
+  }
 }

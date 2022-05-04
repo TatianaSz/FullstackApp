@@ -1,3 +1,13 @@
 {
-  "test": "testing"
+  "token": {
+    "validated": {
+      "main": "Email verified!",
+      "message": "Your accout has been succesfully verified!"
+    },
+    "failed": {
+      "main": "Oops, something went wrong",
+      "message": "Please, check the problem or contact us!"
+    },
+    "goBack": "Back to main page"
+  }
 }

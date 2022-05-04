@@ -27,14 +27,15 @@ const connect_redis_1 = __importDefault(require("connect-redis"));
 const ioredis_1 = __importDefault(require("ioredis"));
 const Token_1 = require("./entity/Token");
 const token_1 = require("./resolvers/token/token");
+const conf_1 = require("../../conf");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, typeorm_1.createConnection)({
             type: 'postgres',
             host: 'localhost',
             port: 5432,
-            username: 'postgres',
-            password: 'Tatianaszulik777',
+            username: conf_1.username,
+            password: conf_1.password,
             database: 'lireddit',
             entities: [Post_1.Post, User_1.User, Token_1.UserToken],
             synchronize: true,
