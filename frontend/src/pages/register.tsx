@@ -1,9 +1,9 @@
-import React from "react";
-import { Form, Formik } from "formik";
-import { Box, Button } from "@chakra-ui/react";
-import { RegisterInput } from "../components/RegisterInput";
-import { useRegisterUserMutation } from "../generated/graphql";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { Form, Formik } from 'formik';
+import { Box, Button } from '@chakra-ui/react';
+import { RegisterInput } from '../components/RegisterInput';
+import { useRegisterUserMutation } from '../generated/graphql';
+import { useTranslation } from 'react-i18next';
 
 interface registerProps {}
 
@@ -14,15 +14,19 @@ const Register: React.FC<registerProps> = ({}) => {
   function validateName(value) {
     let error;
     if (!value) {
-      error = "Username is required";
+      error = 'Username is required';
       return error;
     }
   }
   return (
-    <Box mx="auto" maxW="sm" mt="5">
-      <div>{t("test")}</div>
+    <Box mx='auto' maxW='sm' mt='5'>
       <Formik
-        initialValues={{ username: "", email: "", password: "" }}
+        initialValues={{
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        }}
         onSubmit={async (values, actions) => {
           const response = await register(values);
           if (response.data.createUser.errorArr.length > 0) {
@@ -30,24 +34,28 @@ const Register: React.FC<registerProps> = ({}) => {
           }
         }}
       >
-        {(props) => (
+        {props => (
           <Form>
             <RegisterInput
-              name="username"
-              label="Username"
+              name='username'
+              label={t('register.username')}
               validate={validateName}
             />
-            <RegisterInput name="email" label="Email" />
-            <RegisterInput name="password" label="Password" type="password" />
+            <RegisterInput name='email' label={t('register.email')} />
             <RegisterInput
-              name="confirmPassword"
-              label="Confirm password"
-              type="password"
+              name='password'
+              label={t('register.password')}
+              type='password'
+            />
+            <RegisterInput
+              name='confirmPassword'
+              label={t('register.confirmPassword')}
+              type='password'
             />
             <Button
               mt={4}
-              colorScheme="teal"
-              type="submit"
+              colorScheme='teal'
+              type='submit'
               isLoading={props.isSubmitting}
             >
               Submit

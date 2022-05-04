@@ -9,5 +9,11 @@
       "message": "Proszę, sprawdź wiadomość co poszło nie tak lub skontaktuj sie z nami"
     },
     "goBack": "Powrót na stronę główną"
+  },
+  "register": {
+    "password": "Hasło",
+    "confirmPassword": "Powtórz hasło",
+    "email": "Email",
+    "username": "Twój nick"
   }
 }

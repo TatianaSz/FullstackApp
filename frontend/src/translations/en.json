@@ -9,5 +9,11 @@
       "message": "Please, check the problem or contact us!"
     },
     "goBack": "Back to main page"
+  },
+  "register": {
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "email": "Email",
+    "username": "Username"
   }
 }
