@@ -4,9 +4,9 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-} from "@chakra-ui/react";
-import { FieldConfig, useField } from "formik";
-import React from "react";
+} from '@chakra-ui/react';
+import { FieldConfig, useField } from 'formik';
+import React from 'react';
 
 type RegisterInputProps = FieldConfig<any> & {
   label: string;
@@ -18,7 +18,7 @@ export const RegisterInput: React.FC<RegisterInputProps> = ({
 }) => {
   const [field, meta] = useField(props);
   return (
-    <Box mt="4">
+    <Box mt='4'>
       <FormControl isInvalid={!!meta.touched && !!meta.error}>
         <FormLabel htmlFor={field.name}>{label}</FormLabel>
         <Input

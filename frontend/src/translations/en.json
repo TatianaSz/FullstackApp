@@ -11,6 +11,11 @@
     "goBack": "Back to main page"
   },
   "register": {
+    "invalid": {
+      "usernameRequired": "Username is required!",
+      "usernameTooShort": "Username has to be at least 4 characters long!",
+      "invalidPassword": "Passwords do not match!"
+    },
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "email": "Email",

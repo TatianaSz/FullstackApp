@@ -11,6 +11,11 @@
     "goBack": "Powrót na stronę główną"
   },
   "register": {
+    "invalid": {
+      "usernameRequired": "Nie podano nicku!",
+      "usernameTooShort": "Nick musi mieć przynajmniej 4 znaki!",
+      "invalidPassword": "Hasła się nie zgadzają!"
+    },
     "password": "Hasło",
     "confirmPassword": "Powtórz hasło",
     "email": "Email",
