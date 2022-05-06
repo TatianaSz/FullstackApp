@@ -40,10 +40,10 @@ export class RegisterResolver {
     @Arg('input') { username, email, password }: RegisterInput
   ): Promise<UserResponse> {
     UserErrors = [];
-    isMin(username, 'Username', 4, UserErrors);
-    isMin(password, 'Password', 6, UserErrors);
-    isEmail(email, 'Email', UserErrors);
-    await isUsed(email, 'Email', UserErrors);
+    isMin(username, 'username', 4, UserErrors);
+    isMin(password, 'password', 6, UserErrors);
+    isEmail(email, 'email', UserErrors);
+    await isUsed(email, 'email', UserErrors);
     if (UserErrors.length >= 1) {
       return { errorArr: UserErrors };
     }
@@ -99,7 +99,7 @@ export class RegisterResolver {
         'User not found'
       );
     }
-    canLogin(user, 'Token', UserErrors);
+    canLogin(user, 'token', UserErrors);
     const checkPassword = await bcrypt.compare(password, user.password);
     if (!checkPassword) {
       throw new OwnValidationError(

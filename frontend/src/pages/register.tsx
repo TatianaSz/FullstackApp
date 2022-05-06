@@ -4,6 +4,7 @@ import { Box, Button, FormControl, FormErrorMessage } from '@chakra-ui/react';
 import { RegisterInput } from '../components/RegisterInput';
 import { useRegisterUserMutation } from '../generated/graphql';
 import { useTranslation } from 'react-i18next';
+import { errorFormat } from '../utils/register';
 
 interface registerProps {}
 
@@ -31,10 +32,8 @@ const Register: React.FC<registerProps> = ({}) => {
         onSubmit={async (values, { setErrors }) => {
           const response = await register(values);
           if (response.data.createUser.errorArr.length > 0) {
-            console.log(response.data.createUser.errorArr);
-            setErrors({
-              username: '',
-            });
+            console.log(response.data?.createUser.errorArr);
+            setErrors(errorFormat(response.data.createUser.errorArr));
           }
         }}
       >
